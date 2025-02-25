@@ -1,16 +1,29 @@
 module KM3OpenOsc
 
-export meaningoflife
+import Base: read, write
+using JSON
+import UnROOT
+using KM3io
+using FHist
+using Neurthino
+using NuFlux
 
-"""
-    meaningoflife()
+include("exports.jl")
 
-Determines the meaning of life without floating point precision.
-"""
-function meaningoflife()
-    a = 21
-    b = 2
-    return a * b
-end
+@template (FUNCTIONS, METHODS, MACROS) =
+    """
+    $(TYPEDSIGNATURES)
+    $(DOCSTRING)
+    """
 
-end
+@template TYPES = """
+    $(TYPEDEF)
+
+    $(DOCSTRING)
+
+    # Fields
+    $(TYPEDFIELDS)
+    """
+
+include("root/osc_opendata.jl")
+include("root/oscillations.jl")
