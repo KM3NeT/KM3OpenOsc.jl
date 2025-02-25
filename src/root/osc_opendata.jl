@@ -395,7 +395,7 @@ function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillat
 
 end
 
-function create_histograms(fhist::UnROOT.ROOTFile)
+function create_histograms_from_root(fhist::UnROOT.ROOTFile)
     xbins_true = fhist["hbinstrue"][:fXaxis_fXbins]
 	ybins_true =  fhist["hbinstrue"][:fYaxis_fXbins]
 	xbins_reco = fhist["hbinsreco"][:fXaxis_fXbins]
