@@ -73,7 +73,7 @@ struct OscOpenDataTree{T} <: KM3io.OscillationsData
     tpath::String
 
     function OscOpenDataTree(fobj::UnROOT.ROOTFile, tpath::String)
-        if tpath == ROOT.TTREE_OSC_OPENDATA_NU
+        if tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_NU
             branch_paths = ["E_reco_bin",
                 "Ct_reco_bin",
                 "Flav",
@@ -86,13 +86,13 @@ struct OscOpenDataTree{T} <: KM3io.OscillationsData
                 "Class",
             ]
 
-        elseif tpath == ROOT.TTREE_OSC_OPENDATA_DATA
+        elseif tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_DATA
             branch_paths = ["E_reco_bin",
             "Ct_reco_bin",
             "W",
             "Class",
             ]
-        elseif tpath == ROOT.TTREE_OSC_OPENDATA_MUONS 
+        elseif tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_MUONS 
             branch_paths = ["E_reco_bin",
             "Ct_reco_bin",
             "W",
@@ -280,7 +280,7 @@ function fill_all_hists_from_event!(hs::HistogramsOscillations, e::ResponseMatri
 end
 
 function fill_response!(hs::HistogramsOscillations, f::OscOpenDataTree,  flux_dict::Union{Dict, Nothing}=nothing, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Union{Bool, Nothing}=true, livetime::Union{Float64, Nothing}=1.)
-    if f.tpath == ROOT.TTREE_OSC_OPENDATA_NU
+    if f.tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_NU
         for e in f
            fill_all_hists_from_event_oscillations_and_flux!(hs, e, flux_dict, U0, H0; oscillations=oscillations, livetime=livetime)
         end
