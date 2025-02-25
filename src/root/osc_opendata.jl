@@ -297,18 +297,18 @@ function fill_response!(hs::HistogramsOscillations, f::OscOpenDataTree,  flux_di
 end
 
 
-"""
-Flux parameters structure.
-"""
-function get_flux_dict()
-    NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
-    FLUX_DATA_DIR = joinpath(NUFLUX_PATH, "data")
-    honda_flux = NuFlux.readfluxfile(joinpath(FLUX_DATA_DIR, "frj-ally-20-12-solmin.d"))
-    return Dict(NUE_PDGID => honda_flux[3],
-        NUMU_PDGID => honda_flux[1],
-        ANUE_PDGID => honda_flux[4],
-        ANUMU_PDGID => honda_flux[2],)
-end
+#"""
+#Flux parameters structure.
+#"""
+#function get_flux_dict()
+#    NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
+#    FLUX_DATA_DIR = joinpath(NUFLUX_PATH, "data")
+#    honda_flux = NuFlux.readfluxfile(joinpath(FLUX_DATA_DIR, "frj-ally-20-12-solmin.d"))
+#    return Dict(NUE_PDGID => honda_flux[3],
+#        NUMU_PDGID => honda_flux[1],
+#        ANUE_PDGID => honda_flux[4],
+#        ANUMU_PDGID => honda_flux[2],)
+#end
 
 """
 Oscillation parameters structure.
@@ -340,39 +340,39 @@ function osc_weight_computation(E::Float64, zdir::Float64, Flav::Int16, IsCC::In
 	path = Neurthino.prempath(acos(zdir), 2, samples=20);
 	osc_values = oscprob(U0, H0, E, path, anti = isAnti);
 	
-    if oscillations
-    	for flav in [NUE_PDGID, NUMU_PDGID]
-    		nuin = flav < NUE_PDGID+1 ? 1 : 2
-    		if abs(Flav)==NUE_PDGID
-    			nuout=1
-    		elseif abs(Flav)==NUMU_PDGID
-    			nuout=2
-    		elseif abs(Flav)==NUTAU_PDGID
-    			nuout=3
-    		end
-    		flux_value = NuFlux.flux(flux_dict[flav * sign(Flav)], E, zdir)
-    		if (IsCC > 0)
-    			osc_prob_cc = osc_values[1,1,nuin, nuout]
-    			weight += flux_value*osc_prob_cc
-    		else
-    			weight += flux_value
-    		end
-        end
-    else
-        if abs(Flav)==NUTAU_PDGID
-            weight = 0
-        else
-    		if (IsCC > 0)
-                flux_value = NuFlux.flux(flux_dict[Flav], E, zdir)
-                weight += flux_value
-            else
-                for flav in [NUE_PDGID, NUMU_PDGID]
-                    flux_value = NuFlux.flux(flux_dict[flav * sign(Flav)], E, zdir)
-                    weight += flux_value
-                end
-            end
-        end
-    end
+    #if oscillations
+    #	for flav in [NUE_PDGID, NUMU_PDGID]
+    #		nuin = flav < NUE_PDGID+1 ? 1 : 2
+    #		if abs(Flav)==NUE_PDGID
+    #			nuout=1
+    #		elseif abs(Flav)==NUMU_PDGID
+    #			nuout=2
+    #		elseif abs(Flav)==NUTAU_PDGID
+    #			nuout=3
+    #		end
+    #		flux_value = NuFlux.flux(flux_dict[flav * sign(Flav)], E, zdir)
+    #		if (IsCC > 0)
+    #			osc_prob_cc = osc_values[1,1,nuin, nuout]
+    #			weight += flux_value*osc_prob_cc
+    #		else
+    #			weight += flux_value
+    #		end
+    #    end
+    #else
+    #    if abs(Flav)==NUTAU_PDGID
+    #        weight = 0
+    #    else
+    #		if (IsCC > 0)
+    #            flux_value = NuFlux.flux(flux_dict[Flav], E, zdir)
+    #            weight += flux_value
+    #        else
+    #            for flav in [NUE_PDGID, NUMU_PDGID]
+    #                flux_value = NuFlux.flux(flux_dict[flav * sign(Flav)], E, zdir)
+    #                weight += flux_value
+    #            end
+    #        end
+    #    end
+    #end
 	return weight
 end
 

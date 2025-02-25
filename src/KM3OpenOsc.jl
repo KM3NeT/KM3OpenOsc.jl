@@ -6,7 +6,7 @@ import UnROOT
 using KM3io
 using FHist
 using Neurthino
-using NuFlux
+#using NuFlux
 
 include("exports.jl")
 
