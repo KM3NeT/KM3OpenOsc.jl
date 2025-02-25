@@ -11,54 +11,32 @@ const ANUMU_PDGID = Particle("~nu(mu)0").pdgid.value
 const NUTAU_PDGID = Particle("nu(tau)0").pdgid.value
 const ANUTAU_PDGID = Particle("~nu(tau)0").pdgid.value
 
-struct ResponseMatrixBin
-    E_reco_bin::Int64
-    Ct_reco_bin::Int64
+abstract type ResponseMatrixBin end
 
-    E_true_bin::Union{Int64, Missing}
-    Ct_true_bin::Union{Int64, Missing}
-
-    Flav::Union{Int16, Missing}
-    IsCC::Union{Int16, Missing}
-
-    AnaClass::Int16
-
-    W::Float64
-    Werr::Union{Float64, Missing}
-end
-
-struct ResponseMatrixBinNeutrinos
+struct ResponseMatrixBinNeutrinos <: ResponseMatrixBin
     E_reco_bin::Float64
     Ct_reco_bin::Float64
-
     E_true_bin::Float64
     Ct_true_bin::Float64
-
     Flav::Int16
     IsCC::Int16
-
     AnaClass::Int16
-
     W::Float64
     Werr::Float64
 end
 
-struct ResponseMatrixBinMuons
+struct ResponseMatrixBinNeutrinos <: ResponseMatrixBin
     E_reco_bin::Float64
     Ct_reco_bin::Float64
-
     AnaClass::Int16
-
     W::Float64
     Werr::Float64
 end
 
-struct ResponseMatrixBinData
+struct ResponseMatrixBinData <: ResponseMatrixBin
     E_reco_bin::Float64
     Ct_reco_bin::Float64
-
     AnaClass::Int16
-
     W::Float64
 end
 
@@ -152,16 +130,32 @@ function Base.getindex(f::OscOpenDataTree, idx::Integer)
     idx > length(f) && throw(BoundsError(f, idx))
     e = f._t[idx]  # the event as NamedTuple: struct of arrays
 
-    ResponseMatrixBin(
+    if f.tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_NU
+        ResponseMatrixBinNeutrinos(
+            e.E_reco_bin,
+            e.Ct_reco_bin,
+            e.E_true_bin,
+            e.Ct_true_bin,
+            getpdgnumber(e.Flav, e.IsNB),
+            e.IsCC,
+            e.Class,
+            e.W,
+            e.WE)
+    elseif f.tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_MUONS
+        ResponseMatrixBinMuons(
         e.E_reco_bin,
         e.Ct_reco_bin,
-        get(e, :E_true_bin, missing),
-        get(e, :Ct_true_bin, missing),
-        get(e, :Flav, -99) > -99 ? _getpdgnumber(e.Flav, e.IsNB) : missing,
-        get(e, :IsCC, missing), 
         e.Class, 
         e.W,
-        get(e, :WE, missing),)
+            e.WE)
+    elseif f.tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_DATA
+        ResponseMatrixBinData(
+            e.E_reco_bin,
+            e.Ct_reco_bin,
+            e.Class,
+            e.W)
+    end
+
 end
 
 """
@@ -234,8 +228,9 @@ end
 
 function fill_all_hists_from_event!(hs::HistogramsOscillations, e::ResponseMatrixBin; livetime::Float64=1.)
     W = e.W * livetime
+    if hasproperty(e,:Werr)
     Werr = e.Werr * livetime^2
-    if ismissing(e.Werr)
+    else
         Werr = e.W^2
     end
     if ! ismissing(e.IsCC)
