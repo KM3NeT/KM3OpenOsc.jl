@@ -10,20 +10,20 @@ using Neurthino
 
 include("exports.jl")
 
-@template (FUNCTIONS, METHODS, MACROS) =
-    """
-    $(TYPEDSIGNATURES)
-    $(DOCSTRING)
-    """
-
-@template TYPES = """
-    $(TYPEDEF)
-
-    $(DOCSTRING)
-
-    # Fields
-    $(TYPEDFIELDS)
-    """
+#@template (FUNCTIONS, METHODS, MACROS) =
+#    """
+#    $(TYPEDSIGNATURES)
+#    $(DOCSTRING)
+#    """
+#
+#@template TYPES = """
+#    $(TYPEDEF)
+#
+#    $(DOCSTRING)
+#
+#    # Fields
+#    $(TYPEDFIELDS)
+#    """
 
 include("root/osc_opendata.jl")
 include("root/oscillations.jl")
