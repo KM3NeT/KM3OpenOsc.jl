@@ -6,24 +6,24 @@ import UnROOT
 using KM3io
 using FHist
 using Neurthino
-#using NuFlux
+using NuFlux
 
 include("exports.jl")
 
-#@template (FUNCTIONS, METHODS, MACROS) =
-#    """
-#    $(TYPEDSIGNATURES)
-#    $(DOCSTRING)
-#    """
-#
-#@template TYPES = """
-#    $(TYPEDEF)
-#
-#    $(DOCSTRING)
-#
-#    # Fields
-#    $(TYPEDFIELDS)
-#    """
+@template (FUNCTIONS, METHODS, MACROS) =
+    """
+    $(TYPEDSIGNATURES)
+    $(DOCSTRING)
+    """
+
+@template TYPES = """
+    $(TYPEDEF)
+
+    $(DOCSTRING)
+
+    # Fields
+    $(TYPEDFIELDS)
+    """
 
 include("root/osc_opendata.jl")
 include("root/oscillations.jl")
