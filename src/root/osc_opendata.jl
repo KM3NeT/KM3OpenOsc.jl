@@ -87,7 +87,7 @@ end
 """
 OscOpenDataTree definitions for structure.
 """
-struct OscOpenDataTree{T}
+struct OscOpenDataTree{T} <: KM3io.OscillationsData
     _fobj::UnROOT.ROOTFile
     #header::Union{MCHeader, Missing} # no header for now, subject to change
     _bin_lookup_map::Dict{Tuple{Int,Int,Int},Int} # Not implemented for now
