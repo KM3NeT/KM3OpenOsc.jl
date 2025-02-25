@@ -143,10 +143,10 @@ function Base.getindex(f::OscOpenDataTree, idx::Integer)
             e.WE)
     elseif f.tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_MUONS
         ResponseMatrixBinMuons(
-        e.E_reco_bin,
-        e.Ct_reco_bin,
-        e.Class, 
-        e.W,
+            e.E_reco_bin,
+            e.Ct_reco_bin,
+            e.Class,
+            e.W,
             e.WE)
     elseif f.tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_DATA
         ResponseMatrixBinData(
@@ -229,7 +229,7 @@ end
 function fill_all_hists_from_event!(hs::HistogramsOscillations, e::ResponseMatrixBin; livetime::Float64=1.)
     W = e.W * livetime
     if hasproperty(e,:Werr)
-    Werr = e.Werr * livetime^2
+        Werr = e.Werr * livetime^2
     else
         Werr = e.W^2
     end
