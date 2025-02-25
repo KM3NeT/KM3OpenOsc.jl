@@ -27,3 +27,5 @@ include("exports.jl")
 
 include("root/osc_opendata.jl")
 include("root/oscillations.jl")
+
+end # module
