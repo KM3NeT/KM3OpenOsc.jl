@@ -472,7 +472,6 @@ function build_HDF5_file(filename::String="PISA.h5")
             "tau_cc_nub",
     ]
     for pid in true_pid
-        #create_group(fh5, pid)
         KM3io.create_dataset(fh5, pid, ResponseMatrixBinNeutrinos)
     end
     KM3io.create_dataset(fh5, "atm_muons", ResponseMatrixBinMuons)
