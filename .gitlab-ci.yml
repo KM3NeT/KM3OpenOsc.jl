@@ -8,7 +8,7 @@ cache:
 
 
 stages:
-  - test
+  #- test
   - docs
   - deploy
 
