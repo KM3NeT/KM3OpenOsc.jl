@@ -610,46 +610,50 @@ function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillat
 end
 
 """
-    create_histograms_from_root(fhist::UnROOT.ROOTFile)
+    create_histograms(source)
 
-Create histograms from a ROOT file.
+Create histograms from either a ROOT file or a JSON file.
 
 # Arguments
-- `fhist::UnROOT.ROOTFile`: The ROOT file containing histogram bin definitions.
+- `source`: The source of the histogram bin definitions. Can be either:
+  - `fpath::String`: Path to a ROOT file or JSON file containing histogram bin definitions.
 
 # Returns
 - `HistogramsOscillations`: A structure containing the initialized histograms.
+
+# Examples
+```julia
+# From a ROOT file
+histograms = create_histograms("histograms.root")
+
+# From a JSON file
+histograms = create_histograms("histograms.json")
+```
 """
-function create_histograms_from_root(fhist::UnROOT.ROOTFile)
-    xbins_true = fhist["hbinstrue"][:fXaxis_fXbins]
-	ybins_true =  fhist["hbinstrue"][:fYaxis_fXbins]
-	xbins_reco = fhist["hbinsreco"][:fXaxis_fXbins]
-	ybins_reco =  fhist["hbinsreco"][:fYaxis_fXbins]
-    bins_true = HistogramDefinitions(xbins_true, ybins_true)
-	bins_reco = HistogramDefinitions(xbins_reco, ybins_reco)
-    return HistogramsOscillations(bins_true, bins_reco)
-end
-
-"""
-    create_histograms_from_json(fjson::String)
-
-Create histograms from a JSON file.
-
-# Arguments
-- `fjson::String`: Path to the JSON file containing histogram bin definitions.
-
-# Returns
-- `HistogramsOscillations`: A structure containing the initialized histograms.
-"""
-function create_histograms_from_json(fjson::String)
-    hist_edges = JSON.parsefile(fjson)
-    xbins_true = Float64.(hist_edges["E_true_bins"])
-    ybins_true =  Float64.(hist_edges["cosT_true_bins"])
-    xbins_reco = Float64.(hist_edges["E_reco_bins"])
-    ybins_reco =  Float64.(hist_edges["cosT_reco_bins"])
-    bins_true = HistogramDefinitions(xbins_true, ybins_true)
-	bins_reco = HistogramDefinitions(xbins_reco, ybins_reco)
-    return HistogramsOscillations(bins_true, bins_reco)
+function create_histograms(fpath::String)
+    if endswith(fpath, ".root")
+        # Handle ROOT file
+        fhist = UnROOT.ROOTFile(fpath)
+        xbins_true = fhist["hbinstrue"][:fXaxis_fXbins ]
+        ybins_true = fhist["hbinstrue"][:fYaxis_fXbins ]
+        xbins_reco = fhist["hbinsreco"][:fXaxis_fXbins ]
+        ybins_reco = fhist["hbinsreco"][:fYaxis_fXbins ]
+        bins_true = HistogramDefinitions(xbins_true, ybins_true)
+        bins_reco = HistogramDefinitions(xbins_reco, ybins_reco)
+        return HistogramsOscillations(bins_true, bins_reco)
+    elseif endswith(fpath, ".json")
+        # Handle JSON file
+        hist_edges = JSON.parsefile(fpath)
+        xbins_true = Float64.(hist_edges["E_true_bins"])
+        ybins_true = Float64.(hist_edges["cosT_true_bins"])
+        xbins_reco = Float64.(hist_edges["E_reco_bins"])
+        ybins_reco = Float64.(hist_edges["cosT_reco_bins"])
+        bins_true = HistogramDefinitions(xbins_true, ybins_true)
+        bins_reco = HistogramDefinitions(xbins_reco, ybins_reco)
+        return HistogramsOscillations(bins_true, bins_reco)
+    else
+        error("Unsupported file type. Expected a .root or .json file.")
+    end
 end
 
 """

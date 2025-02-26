@@ -11,6 +11,5 @@ get_oscillation_matrices,
 build_HDF5_file,
 fill_HDF5_file!,
 export_histograms_hdf5,
-create_histograms_from_root,
-create_histograms_from_json,
+create_histograms,
 fill_response!
