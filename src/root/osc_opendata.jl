@@ -1,9 +1,3 @@
-"""
-
-A response matrix bin.
-
-"""
-
 const NUE_PDGID = Particle("nu(e)0").pdgid.value
 const ANUE_PDGID = Particle("~nu(e)0").pdgid.value
 const NUMU_PDGID = Particle("nu(mu)0").pdgid.value
@@ -11,8 +5,29 @@ const ANUMU_PDGID = Particle("~nu(mu)0").pdgid.value
 const NUTAU_PDGID = Particle("nu(tau)0").pdgid.value
 const ANUTAU_PDGID = Particle("~nu(tau)0").pdgid.value
 
+"""
+    ResponseMatrixBin
+
+Abstract type representing a bin in a response matrix.
+"""
 abstract type ResponseMatrixBin end
 
+"""
+    ResponseMatrixBinNeutrinos
+
+A concrete type representing a response matrix bin for neutrino events.
+
+# Fields
+- `E_reco_bin::Float64`: Reconstructed energy bin.
+- `Ct_reco_bin::Float64`: Reconstructed cosine of the zenith angle bin.
+- `E_true_bin::Float64`: True energy bin.
+- `Ct_true_bin::Float64`: True cosine of the zenith angle bin.
+- `Flav::Int16`: Neutrino flavor (PDG ID).
+- `IsCC::Int16`: Flag indicating whether the event is a charged-current interaction.
+- `AnaClass::Int16`: Analysis class identifier.
+- `W::Float64`: Event weight.
+- `Werr::Float64`: Error on the event weight.
+"""
 struct ResponseMatrixBinNeutrinos <: ResponseMatrixBin
     E_reco_bin::Float64
     Ct_reco_bin::Float64
@@ -25,6 +40,18 @@ struct ResponseMatrixBinNeutrinos <: ResponseMatrixBin
     Werr::Float64
 end
 
+"""
+    ResponseMatrixBinMuons
+
+A concrete type representing a response matrix bin for muon events. There is no true quantities for muon events.
+
+# Fields
+- `E_reco_bin::Float64`: Reconstructed energy bin.
+- `Ct_reco_bin::Float64`: Reconstructed cosine of the zenith angle bin.
+- `AnaClass::Int16`: Analysis class identifier.
+- `W::Float64`: Event weight.
+- `Werr::Float64`: Error on the event weight.
+"""
 struct ResponseMatrixBinNeutrinos <: ResponseMatrixBin
     E_reco_bin::Float64
     Ct_reco_bin::Float64
@@ -33,6 +60,17 @@ struct ResponseMatrixBinNeutrinos <: ResponseMatrixBin
     Werr::Float64
 end
 
+"""
+    ResponseMatrixBinData
+
+A concrete type representing a response matrix bin for data events. There is no true quantities for data events.
+
+# Fields
+- `E_reco_bin::Float64`: Reconstructed energy bin.
+- `Ct_reco_bin::Float64`: Reconstructed cosine of the zenith angle bin.
+- `AnaClass::Int16`: Analysis class identifier.
+- `W::Float64`: Event weight.
+"""
 struct ResponseMatrixBinData <: ResponseMatrixBin
     E_reco_bin::Float64
     Ct_reco_bin::Float64
@@ -41,7 +79,21 @@ struct ResponseMatrixBinData <: ResponseMatrixBin
 end
 
 
+"""
+    _getpdgnumber(flav::Integer, isNB::Integer)
 
+Get the PDG ID for a given neutrino flavor and neutrino/antineutrino flag.
+
+# Arguments
+- `flav::Integer`: Neutrino flavor (0: electron, 1: muon, 2: tau).
+- `isNB::Integer`: Flag indicating whether the particle is an antineutrino (1) or neutrino (0).
+
+# Returns
+- `Int`: PDG ID corresponding to the given flavor and type.
+
+# Throws
+- `ErrorException`: If the flavor or type is invalid.
+"""
 function _getpdgnumber(flav::Integer, isNB::Integer)
     flav == 0 && isNB == 0 && return NUE_PDGID # nu(e)0
     flav == 0 && isNB == 1 && return ANUE_PDGID # ~nu(e)0
@@ -53,6 +105,20 @@ function _getpdgnumber(flav::Integer, isNB::Integer)
     error("Invalid flavor: $flav($isNB)")
 end
 
+"""
+    _getanaclassname(fClass::Integer)
+
+Get the name of the analysis class based on its identifier.
+
+# Arguments
+- `fClass::Integer`: Analysis class identifier.
+
+# Returns
+- `String`: Name of the analysis class.
+
+# Throws
+- `ErrorException`: If the class identifier is invalid.
+"""
 function _getanaclassname(fClass::Integer)
     fClass == 1 && return "HighPurityTracks"
     fClass == 2 && return "Showers"
@@ -63,7 +129,15 @@ end
 
 
 """
-OscOpenDataTree definitions for structure.
+    OscOpenDataTree
+
+A structure representing an oscillation open data tree.
+
+# Fields
+- `_fobj::UnROOT.ROOTFile`: The ROOT file object.
+- `_bin_lookup_map::Dict{Tuple{Int,Int,Int},Int}`: A lookup map for bins (not implemented).
+- `_t::T`: The type of the tree.
+- `tpath::String`: The path to the tree in the ROOT file.
 """
 struct OscOpenDataTree{T} <: KM3io.OscillationsData
     _fobj::UnROOT.ROOTFile
@@ -107,6 +181,18 @@ struct OscOpenDataTree{T} <: KM3io.OscillationsData
     end
 end
 
+"""
+    OscOpenDataTree(filename::AbstractString, tpath::String)
+
+Construct an `OscOpenDataTree` from a ROOT file and a tree path.
+
+# Arguments
+- `filename::AbstractString`: Path to the ROOT file.
+- `tpath::String`: Path to the tree within the ROOT file.
+
+# Returns
+- `OscOpenDataTree`: An instance of `OscOpenDataTree`.
+"""
 OscOpenDataTree(filename::AbstractString, tpath::String) = OscOpenDataTree(UnROOT.ROOTFile(filename), tpath)
 
 Base.close(f::OscOpenDataTree) = close(f._fobj)
@@ -159,13 +245,28 @@ function Base.getindex(f::OscOpenDataTree, idx::Integer)
 end
 
 """
-Histogram definitions structure.
+    HistogramDefinitions
+
+A structure defining the binning for histograms.
+
+# Fields
+- `xbins::Union{Int64,Vector{Float64}}`: Bin edges or number of bins for the x-axis.
+- `ybins::Union{Int64,Vector{Float64},Nothing}`: Bin edges or number of bins for the y-axis.
 """
 struct HistogramDefinitions
     xbins::Union{Int64,Vector{Float64}}
     ybins::Union{Int64,Vector{Float64},Nothing}
 end
 
+"""
+    HistogramsOscillations
+
+A structure containing histograms for oscillation analysis.
+
+# Fields
+- `hists_true::Dict{String,Hist2D}`: Histograms for true values.
+- `hists_reco::Dict{String,Hist2D}`: Histograms for reconstructed values.
+"""
 struct HistogramsOscillations
     hists_true::Dict{String,Hist2D}
     hists_reco::Dict{String,Hist2D}
@@ -202,13 +303,34 @@ struct HistogramsOscillations
 
         new(hists_true, hists_reco)
     end
-
-
-    function _build_hist(xbins::Union{Int64,Vector{Float64}}, ybins::Union{Int64,Vector{Float64}})
-        return Hist2D(; binedges=(xbins, ybins))
-    end
 end
 
+"""
+    _build_hist(xbins::Union{Int64,Vector{Float64}}, ybins::Union{Int64,Vector{Float64}})
+
+Build a 2D histogram with the given bin edges.
+
+# Arguments
+- `xbins::Union{Int64,Vector{Float64}}`: Bin edges or number of bins for the x-axis.
+- `ybins::Union{Int64,Vector{Float64}}`: Bin edges or number of bins for the y-axis.
+
+# Returns
+- `Hist2D`: A 2D histogram.
+"""
+function _build_hist(xbins::Union{Int64,Vector{Float64}}, ybins::Union{Int64,Vector{Float64}})
+    return Hist2D(; binedges=(xbins, ybins))
+end
+
+
+"""
+    export_histograms_hdf5(histo::HistogramsOscillations, filename::String)
+
+Export histograms to an HDF5 file.
+
+# Arguments
+- `histo::HistogramsOscillations`: The histograms to export.
+- `filename::String`: The name of the HDF5 file.
+"""
 function export_histograms_hdf5(histo::HistogramsOscillations, filename::String)
     for (name, hist) in histo.hists_true
         h5writehist(filename, "hists_true/"*name, hist)
@@ -218,14 +340,33 @@ function export_histograms_hdf5(histo::HistogramsOscillations, filename::String)
     end
 end
 
+"""
+    fill_hist_by_bin!(h::Hist2D, xbin::Int64, ybin::Int64, w::Float64, werr::Float64)
+
+Fill a histogram bin with a given weight and error.
+
+# Arguments
+- `h::Hist2D`: The histogram to fill.
+- `xbin::Int64`: The x-axis bin index.
+- `ybin::Int64`: The y-axis bin index.
+- `w::Float64`: The weight to fill.
+- `werr::Float64`: The error on the weight.
+"""
 function fill_hist_by_bin!(h::Hist2D, xbin::Int64, ybin::Int64, w::Float64, werr::Float64) # This is a bit of a hacky way to fill the histograms, but it works
     bincounts(h)[xbin, ybin] += w
     sumw2(h)[xbin, ybin] += werr
 end
 
+"""
+    fill_all_hists_from_event!(hs::HistogramsOscillations, e::ResponseMatrixBin; livetime::Float64=1.)
 
+Fill all histograms based on an event.
 
-
+# Arguments
+- `hs::HistogramsOscillations`: The histograms to fill.
+- `e::ResponseMatrixBin`: The event to use for filling.
+- `livetime::Float64=1.`: The livetime scaling factor.
+"""
 function fill_all_hists_from_event!(hs::HistogramsOscillations, e::ResponseMatrixBin; livetime::Float64=1.)
     W = e.W * livetime
     if hasproperty(e,:Werr)
