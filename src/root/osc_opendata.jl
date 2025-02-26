@@ -420,6 +420,24 @@ function fill_all_hists_from_event!(hs::HistogramsOscillations, e::ResponseMatri
 
 end
 
+"""
+    fill_response!(hs::HistogramsOscillations, f::OscOpenDataTree, flux_dict::Union{Dict, Nothing}=nothing, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Union{Bool, Nothing}=true, livetime::Union{Float64, Nothing}=1.)
+
+Fill histograms with events from an `OscOpenDataTree`, optionally applying oscillations and flux weights.
+
+# Arguments
+- `hs::HistogramsOscillations`: The histograms to fill.
+- `f::OscOpenDataTree`: The oscillation open data tree containing events.
+- `flux_dict::Union{Dict, Nothing}=nothing`: Dictionary of neutrino fluxes (optional).
+- `U0::Union{Matrix{ComplexF64}, Nothing}=nothing`: PMNS matrix for oscillations (optional).
+- `H0::Union{Vector{ComplexF64}, Nothing}=nothing`: Hamiltonian for oscillations (optional).
+- `oscillations::Union{Bool, Nothing}=true`: Whether to apply oscillation calculations.
+- `livetime::Union{Float64, Nothing}=1.`: Livetime scaling factor for event weights.
+
+# Behavior
+- If the tree path corresponds to neutrino events (`TTREE_OSC_OPENDATA_NU`), applies oscillations and flux weights.
+- Otherwise, fills histograms without oscillations.
+"""
 function fill_response!(hs::HistogramsOscillations, f::OscOpenDataTree,  flux_dict::Union{Dict, Nothing}=nothing, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Union{Bool, Nothing}=true, livetime::Union{Float64, Nothing}=1.)
     if f.tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_NU
         for e in f
@@ -434,7 +452,16 @@ end
 
 
 """
-Flux parameters structure.
+    get_flux_dict()
+
+Retrieve a dictionary of neutrino fluxes from the Honda flux model.
+
+# Returns
+- `Dict`: A dictionary mapping PDG IDs to neutrino fluxes.
+
+# Notes
+- Uses the Honda flux model stored in the `NuFlux` package.
+- Default file: `frj-ally-20-12-solmin.d`.
 """
 function get_flux_dict()
     NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
@@ -446,8 +473,20 @@ function get_flux_dict()
         ANUMU_PDGID => honda_flux[2],)
 end
 
+
 """
-Oscillation parameters structure.
+    get_oscillation_matrices(nu_params::Dict=Dict(...))
+
+Compute the PMNS matrix and Hamiltonian for neutrino oscillations.
+
+# Arguments
+- `nu_params::Dict`: Dictionary of neutrino oscillation parameters. Defaults to NuFit values.
+
+# Returns
+- `Tuple{Matrix{ComplexF64}, Vector{ComplexF64}}`: The PMNS matrix (`U0`) and Hamiltonian (`H0`).
+
+# Notes
+- Default parameters are based on NuFit v5.1 results http://www.nu-fit.org/?q=node/238.
 """
 function get_oscillation_matrices(nu_params::Dict=Dict(
 		"dm_21" => 7.42e-5,
@@ -470,6 +509,28 @@ function get_oscillation_matrices(nu_params::Dict=Dict(
     return (U, H)
 end
 
+
+"""
+    osc_weight_computation(E::Float64, zdir::Float64, Flav::Int16, IsCC::Int16, flux_dict::Dict, U0::Union{Matrix{ComplexF64}, Nothing}, H0::Union{Vector{ComplexF64}, Nothing}, oscillations::Bool)
+
+Compute the weight for an event, considering oscillations and flux.
+
+# Arguments
+- `E::Float64`: Neutrino energy.
+- `zdir::Float64`: Cosine of the zenith angle.
+- `Flav::Int16`: Neutrino flavor (PDG ID).
+- `IsCC::Int16`: Flag indicating charged-current interaction.
+- `flux_dict::Dict`: Dictionary of neutrino fluxes.
+- `U0::Union{Matrix{ComplexF64}, Nothing}`: PMNS matrix.
+- `H0::Union{Vector{ComplexF64}, Nothing}`: Hamiltonian.
+- `oscillations::Bool`: Whether to apply oscillation calculations.
+
+# Returns
+- `Float64`: The computed event weight.
+
+# Notes
+- Uses the `Neurthino` package for oscillation probability calculations.
+"""
 function osc_weight_computation(E::Float64, zdir::Float64, Flav::Int16, IsCC::Int16, flux_dict::Dict,U0::Union{Matrix{ComplexF64}, Nothing}, H0::Union{Vector{ComplexF64},Nothing}, oscillations::Bool)
 	weight = 0
 	isAnti = (Flav<0)
@@ -512,6 +573,23 @@ function osc_weight_computation(E::Float64, zdir::Float64, Flav::Int16, IsCC::In
 	return weight
 end
 
+"""
+    fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillations, e::ResponseMatrixBin, flux_dict::Dict, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Bool=true, livetime::Float64=1.)
+
+Fill histograms for an event, applying oscillations and flux weights.
+
+# Arguments
+- `hs::HistogramsOscillations`: The histograms to fill.
+- `e::ResponseMatrixBin`: The event to process.
+- `flux_dict::Dict`: Dictionary of neutrino fluxes.
+- `U0::Union{Matrix{ComplexF64}, Nothing}=nothing`: PMNS matrix.
+- `H0::Union{Vector{ComplexF64}, Nothing}=nothing`: Hamiltonian.
+- `oscillations::Bool=true`: Whether to apply oscillation calculations.
+- `livetime::Float64=1.`: Livetime scaling factor.
+
+# Throws
+- `ErrorException`: If oscillations are enabled but `U0` or `H0` are missing.
+"""
 function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillations, e::ResponseMatrixBin, flux_dict::Dict, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Bool=true, livetime::Float64=1.)
 
     if oscillations && (U0 == nothing || H0 == nothing)
@@ -531,6 +609,17 @@ function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillat
 
 end
 
+"""
+    create_histograms_from_root(fhist::UnROOT.ROOTFile)
+
+Create histograms from a ROOT file.
+
+# Arguments
+- `fhist::UnROOT.ROOTFile`: The ROOT file containing histogram bin definitions.
+
+# Returns
+- `HistogramsOscillations`: A structure containing the initialized histograms.
+"""
 function create_histograms_from_root(fhist::UnROOT.ROOTFile)
     xbins_true = fhist["hbinstrue"][:fXaxis_fXbins]
 	ybins_true =  fhist["hbinstrue"][:fYaxis_fXbins]
@@ -541,7 +630,17 @@ function create_histograms_from_root(fhist::UnROOT.ROOTFile)
     return HistogramsOscillations(bins_true, bins_reco)
 end
 
+"""
+    create_histograms_from_json(fjson::String)
 
+Create histograms from a JSON file.
+
+# Arguments
+- `fjson::String`: Path to the JSON file containing histogram bin definitions.
+
+# Returns
+- `HistogramsOscillations`: A structure containing the initialized histograms.
+"""
 function create_histograms_from_json(fjson::String)
     hist_edges = JSON.parsefile(fjson)
     xbins_true = Float64.(hist_edges["E_true_bins"])
@@ -553,50 +652,18 @@ function create_histograms_from_json(fjson::String)
     return HistogramsOscillations(bins_true, bins_reco)
 end
 
+"""
+    build_HDF5_file(filename::String="PISA.h5")
 
-function fill_HDF5_file!(h5file::H5File, hs::HistogramsOscillations, e::ResponseMatrixBin, filetype::String="neutrinos")
-    
-    Ereco = bincenters(hs.hists_reco["reco"])[1][e.E_reco_bin]
-    zdirreco = bincenters(hs.hists_reco["reco"])[2][e.Ct_reco_bin]
-    if filetype=="neutrinos"
-        Etrue = (binedges(hs.hists_true["true"])[1][e.E_true_bin] .* binedges(hs.hists_true["true"])[1][e.E_true_bin+1]).^.5
-        zdirtrue = bincenters(hs.hists_true["true"])[2][e.Ct_true_bin]
+Build an HDF5 file with datasets for neutrino, muon, and data events.
 
-        new_e = ResponseMatrixBinNeutrinos(Ereco, zdirreco, Etrue, zdirtrue, e.Flav, e.IsCC, e.AnaClass, e.W, e.Werr)
-        if Bool(e.IsCC)
-            if Particle(e.Flav).pdgid.value == Particle("nu(e)0").pdgid.value
-                push!(h5file._datasets["elec_cc_nu"], new_e)
-            elseif Particle(e.Flav).pdgid.value == Particle("~nu(e)0").pdgid.value
-                push!(h5file._datasets["elec_cc_nub"], new_e)
-            elseif Particle(e.Flav).pdgid.value == Particle("nu(mu)0").pdgid.value
-                push!(h5file._datasets["muon_cc_nu"], new_e)
-            elseif Particle(e.Flav).pdgid.value == Particle("~nu(mu)0").pdgid.value
-                push!(h5file._datasets["muon_cc_nub"], new_e)
-            elseif Particle(e.Flav).pdgid.value == Particle("nu(tau)0").pdgid.value
-                push!(h5file._datasets["tau_cc_nu"], new_e)
-            elseif Particle(e.Flav).pdgid.value == Particle("~nu(tau)0").pdgid.value
-                push!(h5file._datasets["tau_cc_nub"], new_e)
-            end
-        else
-            if Particle(e.Flav).pdgid.value == Particle("nu(mu)0").pdgid.value
-                push!(h5file._datasets["nc_nu"], new_e)
-            elseif Particle(e.Flav).pdgid.value == Particle("~nu(mu)0").pdgid.value
-                push!(h5file._datasets["nc_nub"], new_e)
-            end
-        end
-            	
-    elseif filetype=="atm_muons"
-        new_e = ResponseMatrixBinMuons(Ereco, zdirreco, e.AnaClass, e.W, e.Werr)
-        push!(h5file._datasets["atm_muons"], new_e)
-    elseif filetype=="data"
-        new_e = ResponseMatrixBinData(Ereco, zdirreco, e.AnaClass, e.W)
-        push!(h5file._datasets["data"], new_e)
+# Arguments
+- `filename::String="data_MC.h5"`: The name of the HDF5 file to create.
 
-    end
-   
-end
-
-function build_HDF5_file(filename::String="PISA.h5")
+# Returns
+- `H5File`: The created HDF5 file.
+"""
+function build_HDF5_file(filename::String="data_MC.h5")
     fh5 = KM3io.H5File(filename, "w")
     true_pid = ["elec_cc_nu",
             "elec_cc_nub",
