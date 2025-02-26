@@ -3,8 +3,20 @@ uuid = "f3e63bb9-bba0-4fef-92d7-12bec46c3825"
 authors = ["Santiago Pena Martinez"]
 version = "0.1.0"
 
+[deps]
+FHist = "68837c9b-b678-4cd5-9925-8a54edc8f695"
+JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+KM3io = "2cab5852-6f21-4982-99b0-6a4792870cfb"
+Neurthino = "ea3506b1-7c4e-45d8-9afb-6e8d18a7dde4"
+UnROOT = "3cd96dde-e98d-4713-81e9-a4a1b0235ce9"
+
 [compat]
-julia = "1"
+FHist = "^0.11.8"
+JSON = "^0.21.4"
+KM3io = "^0.17.10"
+Neurthino = "^1.0.1"
+UnROOT = "^0.10.34"
+julia = "^1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
