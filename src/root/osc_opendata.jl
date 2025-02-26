@@ -657,7 +657,7 @@ function create_histograms(fpath::String)
 end
 
 """
-    build_HDF5_file(filename::String="PISA.h5")
+    build_HDF5_file(filename::String="data_MC.h5")
 
 Build an HDF5 file with datasets for neutrino, muon, and data events.
 
