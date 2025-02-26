@@ -456,7 +456,7 @@ function fill_HDF5_file!(h5file::H5File, hs::HistogramsOscillations, e::Response
 end
 
 function build_HDF5_file(filename::String="PISA.h5")
-    fh5 = H5File(filename, "w")
+    fh5 = KM3io.H5File(filename, "w")
     true_pid = ["elec_cc_nu",
             "elec_cc_nub",
             "nc_nu",
