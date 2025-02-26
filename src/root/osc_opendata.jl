@@ -682,6 +682,6 @@ function build_HDF5_file(filename::String="data_MC.h5")
         KM3io.create_dataset(fh5, pid, ResponseMatrixBinNeutrinos)
     end
     KM3io.create_dataset(fh5, "atm_muons", ResponseMatrixBinMuons)
-    println(KM3io.create_dataset(fh5, "data", ResponseMatrixBinData))
+    KM3io.create_dataset(fh5, "data", ResponseMatrixBinData)
     return fh5
 end
