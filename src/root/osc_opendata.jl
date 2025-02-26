@@ -547,7 +547,7 @@ function osc_weight_computation(E::Float64, zdir::Float64, Flav::Int16, IsCC::In
     		elseif abs(Flav)==NUTAU_PDGID
     			nuout=3
     		end
-    		flux_value = NuFlux.flux(flux_dict[flav * sign(Flav)], E, zdir)
+    		flux_value = NuFlux.flux(flux_dict[flav * sign(Flav)], E, zdir; interpol=true)
     		if (IsCC > 0)
     			osc_prob_cc = osc_values[1,1,nuin, nuout]
     			weight += flux_value*osc_prob_cc
@@ -560,11 +560,11 @@ function osc_weight_computation(E::Float64, zdir::Float64, Flav::Int16, IsCC::In
             weight = 0
         else
     		if (IsCC > 0)
-                flux_value = NuFlux.flux(flux_dict[Flav], E, zdir)
+                flux_value = NuFlux.flux(flux_dict[Flav], E, zdir; interpol=true)
                 weight += flux_value
             else
                 for flav in [NUE_PDGID, NUMU_PDGID]
-                    flux_value = NuFlux.flux(flux_dict[flav * sign(Flav)], E, zdir)
+                    flux_value = NuFlux.flux(flux_dict[flav * sign(Flav)], E, zdir; interpol=true)
                     weight += flux_value
                 end
             end
