@@ -360,7 +360,7 @@ function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillat
 
 	new_W = e.W * weight * livetime
 	new_Werr = e.Werr * weight^2 * livetime^2
-    new_e = ResponseMatrixBin(e.E_reco_bin, e.Ct_reco_bin,  e.E_true_bin, e.Ct_true_bin,  e.Flav, e.IsCC, e.AnaClass, new_W, new_Werr)
+    new_e = KM3io.ResponseMatrixBinNeutrinos(e.E_reco_bin, e.Ct_reco_bin,  e.E_true_bin, e.Ct_true_bin,  e.Flav, e.IsCC, e.AnaClass, new_W, new_Werr)
 
     fill_all_hists_from_event!(hs, new_e)
 
