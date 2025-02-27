@@ -15,12 +15,12 @@ UnROOT = "3cd96dde-e98d-4713-81e9-a4a1b0235ce9"
 
 [compat]
 Corpuscles = "^2.1.2"
-NuFlux = "^0.1.0"
 DocStringExtensions = "^0.8.6"
 FHist = "^0.11.8"
 JSON = "^0.21.4"
 KM3io = "^0.17.10"
 Neurthino = "^1.0.1"
+NuFlux = "^0.1.0"
 UnROOT = "^0.10.34"
 julia = "^1"
 
