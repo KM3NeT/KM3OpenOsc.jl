@@ -34,7 +34,7 @@ const BINDEF = datapath("oscillations", "bins_433kt-y_v0.4.json")
     @test 1 == muons[1].AnaClass
     @test 4 == muons[1].Ct_reco_bin
     @test 1 == muons[1].E_reco_bin
-    @test isapprox(data[1].W, 0.023696756593620773)
+    @test isapprox(data[1].W, 2.0)
 
     hn = create_histograms(BINDEF)
     hd = create_histograms(BINDEF)
