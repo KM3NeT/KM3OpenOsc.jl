@@ -135,7 +135,7 @@ function fill_all_hists_from_event!(hs::HistogramsOscillations, e::KM3io.Respons
     else
         Werr = e.W^2
     end
-    if ! ismissing(e.IsCC)
+    if hasproperty(e, :IsCC)
         if Bool(e.IsCC)
             if Particle(e.Flav).pdgid.value == Particle("nu(e)0").pdgid.value
                 fill_hist_by_bin!(hs.hists_true["elec_cc_nu"], e.E_true_bin, e.Ct_true_bin, W, Werr)
@@ -158,23 +158,23 @@ function fill_all_hists_from_event!(hs::HistogramsOscillations, e::KM3io.Respons
             end
         end
     end
-    if _getanaclassname(e.AnaClass) == "HighPurityTracks"
-        if ! ismissing(e.IsCC)
+    if KM3io._getanaclassname(e.AnaClass) == "HighPurityTracks"
+        if hasproperty(e, :IsCC)
             fill_hist_by_bin!(hs.hists_true["trueHighPurityTracks"], e.E_true_bin, e.Ct_true_bin, W, Werr)
         end
         fill_hist_by_bin!(hs.hists_reco["recoHighPurityTracks"], e.E_reco_bin, e.Ct_reco_bin, W, Werr)
-    elseif _getanaclassname(e.AnaClass) == "LowPurityTracks"
-        if ! ismissing(e.IsCC)
+    elseif KM3io._getanaclassname(e.AnaClass) == "LowPurityTracks"
+        if hasproperty(e, :IsCC)
             fill_hist_by_bin!(hs.hists_true["trueLowPurityTracks"], e.E_true_bin, e.Ct_true_bin, W, Werr)
         end
         fill_hist_by_bin!(hs.hists_reco["recoLowPurityTracks"], e.E_reco_bin, e.Ct_reco_bin, W, Werr)
-    elseif _getanaclassname(e.AnaClass) == "Showers"
-        if ! ismissing(e.IsCC)
+    elseif KM3io._getanaclassname(e.AnaClass) == "Showers"
+        if hasproperty(e, :IsCC)
             fill_hist_by_bin!(hs.hists_true["trueShowers"], e.E_true_bin, e.Ct_true_bin, W, Werr)
         end
         fill_hist_by_bin!(hs.hists_reco["recoShowers"], e.E_reco_bin, e.Ct_reco_bin, W, Werr)
     end
-    if ! ismissing(e.IsCC)
+    if hasproperty(e, :IsCC)
         fill_hist_by_bin!(hs.hists_true["true"], e.E_true_bin, e.Ct_true_bin, W, Werr)
     end
     fill_hist_by_bin!(hs.hists_reco["reco"], e.E_reco_bin, e.Ct_reco_bin, W, Werr)
