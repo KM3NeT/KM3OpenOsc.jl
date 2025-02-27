@@ -119,16 +119,16 @@ function fill_hist_by_bin!(h::Hist2D, xbin::Int64, ybin::Int64, w::Float64, werr
 end
 
 """
-    fill_all_hists_from_event!(hs::HistogramsOscillations, e::ResponseMatrixBin; livetime::Float64=1.)
+    fill_all_hists_from_event!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin; livetime::Float64=1.)
 
 Fill all histograms based on an event.
 
 # Arguments
 - `hs::HistogramsOscillations`: The histograms to fill.
-- `e::ResponseMatrixBin`: The event to use for filling.
+- `e::KM3io.ResponseMatrixBin`: The event to use for filling.
 - `livetime::Float64=1.`: The livetime scaling factor.
 """
-function fill_all_hists_from_event!(hs::HistogramsOscillations, e::ResponseMatrixBin; livetime::Float64=1.)
+function fill_all_hists_from_event!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin; livetime::Float64=1.)
     W = e.W * livetime
     if hasproperty(e,:Werr)
         Werr = e.Werr * livetime^2
@@ -182,13 +182,13 @@ function fill_all_hists_from_event!(hs::HistogramsOscillations, e::ResponseMatri
 end
 
 """
-    fill_response!(hs::HistogramsOscillations, f::OscOpenDataTree, flux_dict::Union{Dict, Nothing}=nothing, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Union{Bool, Nothing}=true, livetime::Union{Float64, Nothing}=1.)
+    fill_response!(hs::HistogramsOscillations, f::KM3io.OscOpenDataTree, flux_dict::Union{Dict, Nothing}=nothing, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Union{Bool, Nothing}=true, livetime::Union{Float64, Nothing}=1.)
 
-Fill histograms with events from an `OscOpenDataTree`, optionally applying oscillations and flux weights.
+Fill histograms with events from an `KM3io.OscOpenDataTree`, optionally applying oscillations and flux weights.
 
 # Arguments
 - `hs::HistogramsOscillations`: The histograms to fill.
-- `f::OscOpenDataTree`: The oscillation open data tree containing events.
+- `f::KM3io.OscOpenDataTree`: The oscillation open data tree containing events.
 - `flux_dict::Union{Dict, Nothing}=nothing`: Dictionary of neutrino fluxes (optional).
 - `U0::Union{Matrix{ComplexF64}, Nothing}=nothing`: PMNS matrix for oscillations (optional).
 - `H0::Union{Vector{ComplexF64}, Nothing}=nothing`: Hamiltonian for oscillations (optional).
@@ -199,7 +199,7 @@ Fill histograms with events from an `OscOpenDataTree`, optionally applying oscil
 - If the tree path corresponds to neutrino events (`TTREE_OSC_OPENDATA_NU`), applies oscillations and flux weights.
 - Otherwise, fills histograms without oscillations.
 """
-function fill_response!(hs::HistogramsOscillations, f::OscOpenDataTree,  flux_dict::Union{Dict, Nothing}=nothing, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Union{Bool, Nothing}=true, livetime::Union{Float64, Nothing}=1.)
+function fill_response!(hs::HistogramsOscillations, f::KM3io.OscOpenDataTree,  flux_dict::Union{Dict, Nothing}=nothing, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Union{Bool, Nothing}=true, livetime::Union{Float64, Nothing}=1.)
     if f.tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_NU
         for e in f
            fill_all_hists_from_event_oscillations_and_flux!(hs, e, flux_dict, U0, H0; oscillations=oscillations, livetime=livetime)
@@ -331,13 +331,13 @@ function osc_weight_computation(E::Float64, zdir::Float64, Flav::Int16, IsCC::In
 end
 
 """
-    fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillations, e::ResponseMatrixBin, flux_dict::Dict, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Bool=true, livetime::Float64=1.)
+    fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin, flux_dict::Dict, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Bool=true, livetime::Float64=1.)
 
 Fill histograms for an event, applying oscillations and flux weights.
 
 # Arguments
 - `hs::HistogramsOscillations`: The histograms to fill.
-- `e::ResponseMatrixBin`: The event to process.
+- `e::KM3io.ResponseMatrixBin`: The event to process.
 - `flux_dict::Dict`: Dictionary of neutrino fluxes.
 - `U0::Union{Matrix{ComplexF64}, Nothing}=nothing`: PMNS matrix.
 - `H0::Union{Vector{ComplexF64}, Nothing}=nothing`: Hamiltonian.
@@ -347,7 +347,7 @@ Fill histograms for an event, applying oscillations and flux weights.
 # Throws
 - `ErrorException`: If oscillations are enabled but `U0` or `H0` are missing.
 """
-function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillations, e::ResponseMatrixBin, flux_dict::Dict, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Bool=true, livetime::Float64=1.)
+function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin, flux_dict::Dict, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Bool=true, livetime::Float64=1.)
 
     if oscillations && (U0 == nothing || H0 == nothing)
         error("Oscillations are enabled, but no PMNS matrix or Hamiltonian was provided.")
@@ -436,9 +436,9 @@ function build_HDF5_file(filename::String="data_MC.h5")
             "tau_cc_nub",
     ]
     for pid in true_pid
-        KM3io.create_dataset(fh5, pid, ResponseMatrixBinNeutrinos)
+        KM3io.create_dataset(fh5, pid, KM3io.ResponseMatrixBinNeutrinos)
     end
-    KM3io.create_dataset(fh5, "atm_muons", ResponseMatrixBinMuons)
-    KM3io.create_dataset(fh5, "data", ResponseMatrixBinData)
+    KM3io.create_dataset(fh5, "atm_muons", KM3io.ResponseMatrixBinMuons)
+    KM3io.create_dataset(fh5, "data", KM3io.ResponseMatrixBinData)
     return fh5
 end
