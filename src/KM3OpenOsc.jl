@@ -7,24 +7,9 @@ using KM3io
 using FHist
 using Neurthino
 using NuFlux
+using Corpuscles
 
 include("exports.jl")
-
-@template (FUNCTIONS, METHODS, MACROS) =
-    """
-    $(TYPEDSIGNATURES)
-    $(DOCSTRING)
-    """
-
-@template TYPES = """
-    $(TYPEDEF)
-
-    $(DOCSTRING)
-
-    # Fields
-    $(TYPEDFIELDS)
-    """
-
 include("root/osc_opendata.jl")
 
 end # module
