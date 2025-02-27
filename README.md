@@ -31,3 +31,30 @@ After that, you can add `KM3OpenOsc.jl` just like any other Julia package:
 ``` julia-repl
 julia> using KM3OpenOsc
 ```
+
+## Quick example with KM3NeT Test data
+
+```julia
+using KM3OpenOsc
+using KM3io
+using KM3NeTTestData
+
+OSCFILE = KM3NeTTestData.datapath("oscillations", "ORCA6_433kt-y_opendata_v0.4_testdata.root")
+BINDEF = KM3NeTTestData.datapath("oscillations", "bins_433kt-y_v0.4.json")
+
+f = KM3io.OSCFile(OSCFILE)
+nu = f.osc_opendata_nu
+data = f.osc_opendata_data
+
+hn = create_histograms(BINDEF)
+hd = create_histograms(BINDEF)
+
+flux_dict = get_flux_dict()
+U,H = get_oscillation_matrices()
+
+fill_response!(hn, nu, flux_dict, U, H; oscillations=true, livetime=1.39) # fill neutrinos ,need flux, oscillation parameters and livetime
+fill_response!(hd, data) # fill data, don't need to specify much
+export_histograms_hdf5(hn, "neutrino_histograms_from_testdata.h5") # You can easily export the filled histograms to hdf5
+build_HDF5_file("responses_to_file.h5") # Create h5 file with same structure as responses bins 
+fill_HDF5_file("responses_to_file.h5", nu, hn, "neutrinos") # Completely export the response as a table in an hdf5 file at a given path 
+```
