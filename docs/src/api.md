@@ -4,6 +4,6 @@
 ```@index
 ```
 
-```@docs
-meaningoflife
+```@autodocs
+Modules = [KM3OpenOsc]
 ```
