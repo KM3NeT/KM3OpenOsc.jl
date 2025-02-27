@@ -52,7 +52,7 @@ A concrete type representing a response matrix bin for muon events. There is no 
 - `W::Float64`: Event weight.
 - `Werr::Float64`: Error on the event weight.
 """
-struct ResponseMatrixBinNeutrinos <: ResponseMatrixBin
+struct ResponseMatrixBinMuons <: ResponseMatrixBin
     E_reco_bin::Float64
     Ct_reco_bin::Float64
     AnaClass::Int16
