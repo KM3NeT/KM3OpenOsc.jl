@@ -44,40 +44,40 @@ before_script:
         using Printf
         @printf "Test coverage %.2f%%\n" 100c / t'
 
-#Julia 1.6:
-#  image: docker.km3net.de/base/julia:1.6
-#  stage: test
-#  extends:
-#    - .script
-#    - .coverage
-#
-#Julia 1.8:
-#  image: docker.km3net.de/base/julia:1.8
-#  stage: test
-#  extends:
-#    - .script
-#    - .coverage
-#
-#Julia 1.9:
-#  image: docker.km3net.de/base/julia:1.9
-#  stage: test
-#  extends:
-#    - .script
-#    - .coverage
-#
-#Julia 1.10:
-#  image: git.km3net.de:4567/common/dockerfiles/base/julia:1.10
-#  stage: test
-#  extends:
-#    - .script
-#    - .coverage
-#
-#Julia 1.11:
-#  image: git.km3net.de:4567/common/dockerfiles/base/julia:1.11
-#  stage: test
-#  extends:
-#    - .script
-#    - .coverage
+Julia 1.6:
+  image: docker.km3net.de/base/julia:1.6
+  stage: test
+  extends:
+    - .script
+    - .coverage
+
+Julia 1.8:
+  image: docker.km3net.de/base/julia:1.8
+  stage: test
+  extends:
+    - .script
+    - .coverage
+
+Julia 1.9:
+  image: docker.km3net.de/base/julia:1.9
+  stage: test
+  extends:
+    - .script
+    - .coverage
+
+Julia 1.10:
+  image: git.km3net.de:4567/common/dockerfiles/base/julia:1.10
+  stage: test
+  extends:
+    - .script
+    - .coverage
+
+Julia 1.11:
+  image: git.km3net.de:4567/common/dockerfiles/base/julia:1.11
+  stage: test
+  extends:
+    - .script
+    - .coverage
 
 
 docs:
