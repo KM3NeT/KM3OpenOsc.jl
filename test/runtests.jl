@@ -1,3 +1,3 @@
 using Test
 
-#include("oscillations.jl")
+include("oscillations.jl")

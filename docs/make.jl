@@ -14,6 +14,7 @@ makedocs(;
     pages = [
         "Home" => "index.md",
         "API" => "api.md"
+        #"Examples" => "examples/an_example.md"
     ],
     repo = Documenter.Remotes.URL(
         "https://git.km3net.de/common/KM3OpenOsc.jl/blob/{commit}{path}#L{line}",
