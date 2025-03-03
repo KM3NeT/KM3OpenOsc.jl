@@ -6,13 +6,9 @@ const NUTAU_PDGID = Particle("nu(tau)0").pdgid.value
 const ANUTAU_PDGID = Particle("~nu(tau)0").pdgid.value
 
 """
-    HistogramDefinitions
 
-A structure defining the binning for histograms.
+`HistogramDefinitions` is a structure defining the binning for histograms.
 
-# Fields
-- `xbins::Union{Int64,Vector{Float64}}`: Bin edges or number of bins for the x-axis.
-- `ybins::Union{Int64,Vector{Float64},Nothing}`: Bin edges or number of bins for the y-axis.
 """
 struct HistogramDefinitions
     xbins::Union{Int64,Vector{Float64}}
@@ -20,13 +16,9 @@ struct HistogramDefinitions
 end
 
 """
-    HistogramsOscillations
 
-A structure containing histograms for oscillation analysis.
+`HistogramsOscillations`is a structure containing histograms for oscillation analysis.
 
-# Fields
-- `hists_true::Dict{String,Hist2D}`: Histograms for true values.
-- `hists_reco::Dict{String,Hist2D}`: Histograms for reconstructed values.
 """
 struct HistogramsOscillations
     hists_true::Dict{String,Hist2D}
@@ -66,31 +58,15 @@ struct HistogramsOscillations
     end
 end
 
-"""
-    _build_hist(xbins::Union{Int64,Vector{Float64}}, ybins::Union{Int64,Vector{Float64}})
-
-Build a 2D histogram with the given bin edges.
-
-# Arguments
-- `xbins::Union{Int64,Vector{Float64}}`: Bin edges or number of bins for the x-axis.
-- `ybins::Union{Int64,Vector{Float64}}`: Bin edges or number of bins for the y-axis.
-
-# Returns
-- `Hist2D`: A 2D histogram.
-"""
 function _build_hist(xbins::Union{Int64,Vector{Float64}}, ybins::Union{Int64,Vector{Float64}})
     return Hist2D(; binedges=(xbins, ybins))
 end
 
 
 """
-    export_histograms_hdf5(histo::HistogramsOscillations, filename::String)
 
 Export histograms to an HDF5 file.
 
-# Arguments
-- `histo::HistogramsOscillations`: The histograms to export.
-- `filename::String`: The name of the HDF5 file.
 """
 function export_histograms_hdf5(histo::HistogramsOscillations, filename::String)
     for (name, hist) in histo.hists_true
@@ -102,16 +78,9 @@ function export_histograms_hdf5(histo::HistogramsOscillations, filename::String)
 end
 
 """
-    fill_hist_by_bin!(h::Hist2D, xbin::Int64, ybin::Int64, w::Float64, werr::Float64)
 
 Fill a histogram bin with a given weight and error.
 
-# Arguments
-- `h::Hist2D`: The histogram to fill.
-- `xbin::Int64`: The x-axis bin index.
-- `ybin::Int64`: The y-axis bin index.
-- `w::Float64`: The weight to fill.
-- `werr::Float64`: The error on the weight.
 """
 function fill_hist_by_bin!(h::Hist2D, xbin::Int64, ybin::Int64, w::Float64, werr::Float64) # This is a bit of a hacky way to fill the histograms, but it works
     bincounts(h)[xbin, ybin] += w
@@ -119,14 +88,9 @@ function fill_hist_by_bin!(h::Hist2D, xbin::Int64, ybin::Int64, w::Float64, werr
 end
 
 """
-    fill_all_hists_from_event!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin; livetime::Float64=1.)
 
 Fill all histograms based on an event.
 
-# Arguments
-- `hs::HistogramsOscillations`: The histograms to fill.
-- `e::KM3io.ResponseMatrixBin`: The event to use for filling.
-- `livetime::Float64=1.`: The livetime scaling factor.
 """
 function fill_all_hists_from_event!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin; livetime::Float64=1.)
     W = e.W * livetime
@@ -182,22 +146,9 @@ function fill_all_hists_from_event!(hs::HistogramsOscillations, e::KM3io.Respons
 end
 
 """
-    fill_response!(hs::HistogramsOscillations, f::KM3io.OscOpenDataTree, flux_dict::Union{Dict, Nothing}=nothing, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Union{Bool, Nothing}=true, livetime::Union{Float64, Nothing}=1.)
 
 Fill histograms with events from an `KM3io.OscOpenDataTree`, optionally applying oscillations and flux weights.
 
-# Arguments
-- `hs::HistogramsOscillations`: The histograms to fill.
-- `f::KM3io.OscOpenDataTree`: The oscillation open data tree containing events.
-- `flux_dict::Union{Dict, Nothing}=nothing`: Dictionary of neutrino fluxes (optional).
-- `U0::Union{Matrix{ComplexF64}, Nothing}=nothing`: PMNS matrix for oscillations (optional).
-- `H0::Union{Vector{ComplexF64}, Nothing}=nothing`: Hamiltonian for oscillations (optional).
-- `oscillations::Union{Bool, Nothing}=true`: Whether to apply oscillation calculations.
-- `livetime::Union{Float64, Nothing}=1.`: Livetime scaling factor for event weights.
-
-# Behavior
-- If the tree path corresponds to neutrino events (`TTREE_OSC_OPENDATA_NU`), applies oscillations and flux weights.
-- Otherwise, fills histograms without oscillations.
 """
 function fill_response!(hs::HistogramsOscillations, f::KM3io.OscOpenDataTree,  flux_dict::Union{Dict, Nothing}=nothing, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Union{Bool, Nothing}=true, livetime::Union{Float64, Nothing}=1.)
     if f.tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_NU
@@ -213,16 +164,9 @@ end
 
 
 """
-    get_flux_dict()
 
 Retrieve a dictionary of neutrino fluxes from the Honda flux model.
 
-# Returns
-- `Dict`: A dictionary mapping PDG IDs to neutrino fluxes.
-
-# Notes
-- Uses the Honda flux model stored in the `NuFlux` package.
-- Default file: `frj-ally-20-12-solmin.d`.
 """
 function get_flux_dict()
     NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
@@ -232,15 +176,8 @@ end
 
 
 """
-    get_oscillation_matrices(nu_params::Dict=Dict(...))
 
 Compute the PMNS matrix and Hamiltonian for neutrino oscillations.
-
-# Arguments
-- `nu_params::Dict`: Dictionary of neutrino oscillation parameters. Defaults to NuFit values.
-
-# Returns
-- `Tuple{Matrix{ComplexF64}, Vector{ComplexF64}}`: The PMNS matrix (`U0`) and Hamiltonian (`H0`).
 
 # Notes
 - Default parameters are based on NuFit v5.1 results http://www.nu-fit.org/?q=node/238.
@@ -268,25 +205,9 @@ end
 
 
 """
-    osc_weight_computation(E::Float64, zdir::Float64, Flav::Int16, IsCC::Int16, flux_dict::Dict, U0::Union{Matrix{ComplexF64}, Nothing}, H0::Union{Vector{ComplexF64}, Nothing}, oscillations::Bool)
 
 Compute the weight for an event, considering oscillations and flux.
 
-# Arguments
-- `E::Float64`: Neutrino energy.
-- `zdir::Float64`: Cosine of the zenith angle.
-- `Flav::Int16`: Neutrino flavor (PDG ID).
-- `IsCC::Int16`: Flag indicating charged-current interaction.
-- `flux_dict::Dict`: Dictionary of neutrino fluxes.
-- `U0::Union{Matrix{ComplexF64}, Nothing}`: PMNS matrix.
-- `H0::Union{Vector{ComplexF64}, Nothing}`: Hamiltonian.
-- `oscillations::Bool`: Whether to apply oscillation calculations.
-
-# Returns
-- `Float64`: The computed event weight.
-
-# Notes
-- Uses the `Neurthino` package for oscillation probability calculations.
 """
 function osc_weight_computation(E::Float64, zdir::Float64, Flav::Int16, IsCC::Int16, flux_dict::Dict,U0::Union{Matrix{ComplexF64}, Nothing}, H0::Union{Vector{ComplexF64},Nothing}, oscillations::Bool)
 	weight = 0
@@ -331,21 +252,9 @@ function osc_weight_computation(E::Float64, zdir::Float64, Flav::Int16, IsCC::In
 end
 
 """
-    fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin, flux_dict::Dict, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Bool=true, livetime::Float64=1.)
 
 Fill histograms for an event, applying oscillations and flux weights.
 
-# Arguments
-- `hs::HistogramsOscillations`: The histograms to fill.
-- `e::KM3io.ResponseMatrixBin`: The event to process.
-- `flux_dict::Dict`: Dictionary of neutrino fluxes.
-- `U0::Union{Matrix{ComplexF64}, Nothing}=nothing`: PMNS matrix.
-- `H0::Union{Vector{ComplexF64}, Nothing}=nothing`: Hamiltonian.
-- `oscillations::Bool=true`: Whether to apply oscillation calculations.
-- `livetime::Float64=1.`: Livetime scaling factor.
-
-# Throws
-- `ErrorException`: If oscillations are enabled but `U0` or `H0` are missing.
 """
 function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin, flux_dict::Dict, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Bool=true, livetime::Float64=1.)
 
@@ -367,25 +276,9 @@ function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillat
 end
 
 """
-    create_histograms(source)
 
 Create histograms from either a ROOT file or a JSON file.
 
-# Arguments
-- `source`: The source of the histogram bin definitions. Can be either:
-  - `fpath::String`: Path to a ROOT file or JSON file containing histogram bin definitions.
-
-# Returns
-- `HistogramsOscillations`: A structure containing the initialized histograms.
-
-# Examples
-```julia
-# From a ROOT file
-histograms = create_histograms("histograms.root")
-
-# From a JSON file
-histograms = create_histograms("histograms.json")
-```
 """
 function create_histograms(fpath::String)
     if endswith(fpath, ".root")
@@ -413,6 +306,11 @@ function create_histograms(fpath::String)
     end
 end
 
+"""
+
+Fill an HDF5 file with datasets for neutrino, muon, and data events.
+
+"""
 function fill_HDF5_file!(h5file::H5File, f::KM3io.OscOpenDataTree, hs::HistogramsOscillations, filetype::String="neutrinos")
     for e in f
         Ereco = bincenters(hs.hists_reco["reco"])[1][e.E_reco_bin]
@@ -460,15 +358,9 @@ end
 
 
 """
-    build_HDF5_file(filename::String="data_MC.h5")
 
 Build an HDF5 file with datasets for neutrino, muon, and data events.
 
-# Arguments
-- `filename::String="data_MC.h5"`: The name of the HDF5 file to create.
-
-# Returns
-- `H5File`: The created HDF5 file.
 """
 function build_HDF5_file(filename::String="data_MC.h5")
     fh5 = KM3io.H5File(filename, "w")
