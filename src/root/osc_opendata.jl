@@ -311,7 +311,8 @@ end
 Fill an HDF5 file with datasets for neutrino, muon, and data events.
 
 """
-function fill_HDF5_file!(h5file::H5File, f::KM3io.OscOpenDataTree, hs::HistogramsOscillations, filetype::String="neutrinos")
+function fill_HDF5_file!(filename::String, f::KM3io.OscOpenDataTree, hs::HistogramsOscillations, filetype::String="neutrinos")
+    h5file = KM3io.H5File(filename, "w")
     for e in f
         Ereco = bincenters(hs.hists_reco["reco"])[1][e.E_reco_bin]
         zdirreco = bincenters(hs.hists_reco["reco"])[2][e.Ct_reco_bin]
