@@ -7,6 +7,49 @@ const ANUTAU_PDGID = Particle("~nu(tau)0").pdgid.value
 
 """
 
+A concrete type representing a response matrix bin for neutrino events using floats.
+
+"""
+struct ResponseMatrixBinNeutrinos <: ResponseMatrixBin
+    E_reco_bin::Float64
+    Ct_reco_bin::Float64
+    E_true_bin::Float64
+    Ct_true_bin::Float64
+    Flav::Int16
+    IsCC::Int16
+    AnaClass::Int16
+    W::Float64
+    Werr::Float64
+end
+
+"""
+
+A concrete type representing a response matrix bin for muon events. There is no true quantities for muon events using floats.
+
+"""
+struct ResponseMatrixBinMuons <: ResponseMatrixBin
+    E_reco_bin::Float64
+    Ct_reco_bin::Float64
+    AnaClass::Int16
+    W::Float64
+    Werr::Float64
+end
+
+"""
+
+A concrete type representing a response matrix bin for data events. There is no true quantities for data events using floats.
+
+"""
+struct ResponseMatrixBinData <: ResponseMatrixBin
+    E_reco_bin::Float64
+    Ct_reco_bin::Float64
+    AnaClass::Int16
+    W::Float64
+end
+
+
+"""
+
 `HistogramDefinitions` is a structure defining the binning for histograms.
 
 """
@@ -372,9 +415,9 @@ function build_HDF5_file(filename::String="data_MC.h5")
             "tau_cc_nub",
     ]
     for pid in true_pid
-        KM3io.create_dataset(fh5, pid, KM3io.ResponseMatrixBinNeutrinos)
+        KM3io.create_dataset(fh5, pid, ResponseMatrixBinNeutrinos)
     end
-    KM3io.create_dataset(fh5, "atm_muons", KM3io.ResponseMatrixBinMuons)
-    KM3io.create_dataset(fh5, "data", KM3io.ResponseMatrixBinData)
+    KM3io.create_dataset(fh5, "atm_muons", ResponseMatrixBinMuons)
+    KM3io.create_dataset(fh5, "data", ResponseMatrixBinData)
     return fh5
 end
