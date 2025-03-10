@@ -55,6 +55,8 @@ U,H = get_oscillation_matrices()
 fill_response!(hn, nu, flux_dict, U, H; oscillations=true, livetime=1.39) # fill neutrinos ,need flux, oscillation parameters and livetime
 fill_response!(hd, data) # fill data, don't need to specify much
 export_histograms_hdf5(hn, "neutrino_histograms_from_testdata.h5") # You can easily export the filled histograms to hdf5
-build_HDF5_file("responses_to_file.h5") # Create h5 file with same structure as responses bins 
-fill_HDF5_file("responses_to_file.h5", nu, hn, "neutrinos") # Completely export the response as a table in an hdf5 file at a given path 
+h5f = build_HDF5_file("responses_to_file.h5") # Create h5 file with same structure as responses bins 
+fill_HDF5_file!(h5f, nu, hn, "neutrinos") # Completely export the response as a table in an hdf5 file at a given path 
+fill_HDF5_file!(h5f, data, hd, "data") # Completely export the response as a table in an hdf5 file at a given path 
+close(h5f)
 ```
