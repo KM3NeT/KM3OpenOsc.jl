@@ -211,7 +211,7 @@ end
 Retrieve a dictionary of neutrino fluxes from the Honda flux model.
 
 """
-function get_flux_dict(path::String="")
+function get_flux_dict(flux_path::String="")
     if flux_path == ""
         NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
         FLUX_DATA_DIR = joinpath(NUFLUX_PATH, "data")
