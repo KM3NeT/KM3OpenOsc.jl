@@ -38,8 +38,9 @@ julia> using KM3OpenOsc
 using KM3OpenOsc
 using KM3io
 using KM3NeTTestData
+using NuFlux
 
-OSCFILE = KM3NeTTestData.datapath("oscillations", "ORCA6_433kt-y_opendata_v0.4_testdata.root")
+OSCFILE = KM3NeTTestData.datapath("oscillations", "ORCA6_433kt-y_opendata_v0.5_testdata.root")
 BINDEF = KM3NeTTestData.datapath("oscillations", "bins_433kt-y_v0.4.json")
 
 f = KM3io.OSCFile(OSCFILE)
@@ -49,8 +50,19 @@ data = f.osc_opendata_data
 hn = create_histograms(BINDEF)
 hd = create_histograms(BINDEF)
 
-flux_dict = get_flux_dict()
-U,H = get_oscillation_matrices()
+BF = Dict("dm_21" => 7.42e-5, #ORCA 433 kt-y standard oscillations Best Fit
+                       "dm_31" => 2.18e-3,
+                       "theta_12" => deg2rad(33.45),
+                       "theta_23" => deg2rad(45.57299599919429),
+                       "theta_13" => deg2rad(8.62),
+                       "dcp" => deg2rad(230))
+
+NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
+FLUX_DATA_DIR = joinpath(NUFLUX_PATH, "data")
+flux_path = joinpath(FLUX_DATA_DIR, "frj-ally-20-12-solmin.d") # Get flux of Honda Frejus site from NuFlux
+
+flux_dict = get_flux_dict(flux_path) # If no flux path is provided, Honda flux at frejus site is taken by default
+U,H = get_oscillation_matrices(BF) # If no dict of parameters is provided NuFit is selected by default
 
 fill_response!(hn, nu, flux_dict, U, H; oscillations=true, livetime=1.39) # fill neutrinos ,need flux, oscillation parameters and livetime
 fill_response!(hd, data) # fill data, don't need to specify much
