@@ -211,10 +211,13 @@ end
 Retrieve a dictionary of neutrino fluxes from the Honda flux model.
 
 """
-function get_flux_dict()
-    NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
-    FLUX_DATA_DIR = joinpath(NUFLUX_PATH, "data")
-    return NuFlux.readfluxfile(joinpath(FLUX_DATA_DIR, "frj-ally-20-12-solmin.d"))
+function get_flux_dict(path::String="")
+    if flux_path == ""
+        NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
+        FLUX_DATA_DIR = joinpath(NUFLUX_PATH, "data")
+        flux_path = joinpath(FLUX_DATA_DIR, "frj-ally-20-12-solmin.d")
+    end
+    return NuFlux.readfluxfile(flux_path)
 end
 
 
