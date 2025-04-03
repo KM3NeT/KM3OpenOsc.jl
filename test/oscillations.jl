@@ -1,5 +1,6 @@
 using KM3OpenOsc
 using KM3io
+using NuFlux
 import UnROOT
 using KM3NeTTestData
 using Test
@@ -67,12 +68,12 @@ const BINDEF = datapath("oscillations", "bins_433kt-y_v0.4.json")
 
     fill_response!(hn, nu, flux_dict, U, H; oscillations=true)
 
-    @test isapprox(integral(hd.hists_reco["recoShowers"]), 206.89133463351368)
+    @test isapprox(integral(hn.hists_reco["recoShowers"]), 206.89133463351368)
 
     hdf5_filename = "test_data.h5"
     export_histograms_hdf5(hn, hdf5_filename)
     @test isfile(hdf5_filename)
-    rm(filename)
+    rm(hdf5_filename)
 
     fh5 = build_HDF5_file(hdf5_filename)
     fill_HDF5_file!(fh5, nu, "neutrinos")
