@@ -137,54 +137,54 @@ Fill all histograms based on an event.
 """
 function fill_all_hists_from_event!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin; livetime::Float64=1.)
     W = e.W * livetime
-    if hasproperty(e,:Werr)
-        Werr = e.Werr * livetime^2
+    if hasproperty(e,:WE)
+        WE = e.WE * livetime^2
     else
-        Werr = e.W^2
+        WE = e.W^2
     end
     if hasproperty(e, :IsCC)
         if Bool(e.IsCC)
             if Particle(e.Pdg).pdgid.value == Particle("nu(e)0").pdgid.value
-                fill_hist_by_bin!(hs.hists_true["elec_cc_nu"], e.E_true_bin, e.Ct_true_bin, W, Werr)
+                fill_hist_by_bin!(hs.hists_true["elec_cc_nu"], e.E_true_bin, e.Ct_true_bin, W, WE)
             elseif Particle(e.Pdg).pdgid.value == Particle("~nu(e)0").pdgid.value
-                fill_hist_by_bin!(hs.hists_true["elec_cc_nub"], e.E_true_bin, e.Ct_true_bin, W, Werr)
+                fill_hist_by_bin!(hs.hists_true["elec_cc_nub"], e.E_true_bin, e.Ct_true_bin, W, WE)
             elseif Particle(e.Pdg).pdgid.value == Particle("nu(mu)0").pdgid.value
-                fill_hist_by_bin!(hs.hists_true["muon_cc_nu"], e.E_true_bin, e.Ct_true_bin, W, Werr)
+                fill_hist_by_bin!(hs.hists_true["muon_cc_nu"], e.E_true_bin, e.Ct_true_bin, W, WE)
             elseif Particle(e.Pdg).pdgid.value == Particle("~nu(mu)0").pdgid.value
-                fill_hist_by_bin!(hs.hists_true["muon_cc_nub"], e.E_true_bin, e.Ct_true_bin, W, Werr)
+                fill_hist_by_bin!(hs.hists_true["muon_cc_nub"], e.E_true_bin, e.Ct_true_bin, W, WE)
             elseif Particle(e.Pdg).pdgid.value == Particle("nu(tau)0").pdgid.value
-                fill_hist_by_bin!(hs.hists_true["tau_cc_nu"], e.E_true_bin, e.Ct_true_bin, W, Werr)
+                fill_hist_by_bin!(hs.hists_true["tau_cc_nu"], e.E_true_bin, e.Ct_true_bin, W, WE)
             elseif Particle(e.Pdg).pdgid.value == Particle("~nu(tau)0").pdgid.value
-                fill_hist_by_bin!(hs.hists_true["tau_cc_nub"], e.E_true_bin, e.Ct_true_bin, W, Werr)
+                fill_hist_by_bin!(hs.hists_true["tau_cc_nub"], e.E_true_bin, e.Ct_true_bin, W, WE)
             end
         else
             if Particle(e.Pdg).pdgid.value == Particle("nu(mu)0").pdgid.value
-                fill_hist_by_bin!(hs.hists_true["nc_nu"], e.E_true_bin, e.Ct_true_bin, W, Werr)
+                fill_hist_by_bin!(hs.hists_true["nc_nu"], e.E_true_bin, e.Ct_true_bin, W, WE)
             elseif Particle(e.Pdg).pdgid.value == Particle("~nu(mu)0").pdgid.value
-                fill_hist_by_bin!(hs.hists_true["nc_nub"], e.E_true_bin, e.Ct_true_bin, W, Werr)
+                fill_hist_by_bin!(hs.hists_true["nc_nub"], e.E_true_bin, e.Ct_true_bin, W, WE)
             end
         end
     end
     if KM3io._getanaclassname(e.AnaClass) == "HighPurityTracks"
         if hasproperty(e, :IsCC)
-            fill_hist_by_bin!(hs.hists_true["trueHighPurityTracks"], e.E_true_bin, e.Ct_true_bin, W, Werr)
+            fill_hist_by_bin!(hs.hists_true["trueHighPurityTracks"], e.E_true_bin, e.Ct_true_bin, W, WE)
         end
-        fill_hist_by_bin!(hs.hists_reco["recoHighPurityTracks"], e.E_reco_bin, e.Ct_reco_bin, W, Werr)
+        fill_hist_by_bin!(hs.hists_reco["recoHighPurityTracks"], e.E_reco_bin, e.Ct_reco_bin, W, WE)
     elseif KM3io._getanaclassname(e.AnaClass) == "LowPurityTracks"
         if hasproperty(e, :IsCC)
-            fill_hist_by_bin!(hs.hists_true["trueLowPurityTracks"], e.E_true_bin, e.Ct_true_bin, W, Werr)
+            fill_hist_by_bin!(hs.hists_true["trueLowPurityTracks"], e.E_true_bin, e.Ct_true_bin, W, WE)
         end
-        fill_hist_by_bin!(hs.hists_reco["recoLowPurityTracks"], e.E_reco_bin, e.Ct_reco_bin, W, Werr)
+        fill_hist_by_bin!(hs.hists_reco["recoLowPurityTracks"], e.E_reco_bin, e.Ct_reco_bin, W, WE)
     elseif KM3io._getanaclassname(e.AnaClass) == "Showers"
         if hasproperty(e, :IsCC)
-            fill_hist_by_bin!(hs.hists_true["trueShowers"], e.E_true_bin, e.Ct_true_bin, W, Werr)
+            fill_hist_by_bin!(hs.hists_true["trueShowers"], e.E_true_bin, e.Ct_true_bin, W, WE)
         end
-        fill_hist_by_bin!(hs.hists_reco["recoShowers"], e.E_reco_bin, e.Ct_reco_bin, W, Werr)
+        fill_hist_by_bin!(hs.hists_reco["recoShowers"], e.E_reco_bin, e.Ct_reco_bin, W, WE)
     end
     if hasproperty(e, :IsCC)
-        fill_hist_by_bin!(hs.hists_true["true"], e.E_true_bin, e.Ct_true_bin, W, Werr)
+        fill_hist_by_bin!(hs.hists_true["true"], e.E_true_bin, e.Ct_true_bin, W, WE)
     end
-    fill_hist_by_bin!(hs.hists_reco["reco"], e.E_reco_bin, e.Ct_reco_bin, W, Werr)
+    fill_hist_by_bin!(hs.hists_reco["reco"], e.E_reco_bin, e.Ct_reco_bin, W, WE)
 
 end
 
@@ -314,8 +314,8 @@ function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillat
 	
 
 	new_W = e.W * weight * livetime
-	new_Werr = e.Werr * weight^2 * livetime^2
-    new_e = KM3io.ResponseMatrixBinNeutrinos(e.E_reco_bin, e.Ct_reco_bin,  e.E_true_bin, e.Ct_true_bin,  e.Pdg, e.IsCC, e.AnaClass, new_W, new_Werr)
+	new_WE = e.WE * weight^2 * livetime^2
+    new_e = KM3io.ResponseMatrixBinNeutrinos(e.E_reco_bin, e.Ct_reco_bin,  e.E_true_bin, e.Ct_true_bin,  e.Pdg, e.IsCC, e.AnaClass, new_W, new_WE)
 
     fill_all_hists_from_event!(hs, new_e)
 
@@ -365,7 +365,7 @@ function fill_HDF5_file!(h5file::H5File, f::KM3io.OscOpenDataTree, hs::Histogram
             Etrue = (binedges(hs.hists_true["true"])[1][e.E_true_bin] .* binedges(hs.hists_true["true"])[1][e.E_true_bin+1]).^.5
             zdirtrue = bincenters(hs.hists_true["true"])[2][e.Ct_true_bin]
 
-            new_e = ResponseMatrixBinNeutrinos(Ereco, zdirreco, Etrue, zdirtrue, e.Pdg, e.IsCC, e.AnaClass, e.W, e.Werr)
+            new_e = ResponseMatrixBinNeutrinos(Ereco, zdirreco, Etrue, zdirtrue, e.Pdg, e.IsCC, e.AnaClass, e.W, e.WE)
             if Bool(e.IsCC)
                 if Particle(e.Pdg).pdgid.value == Particle("nu(e)0").pdgid.value
                     push!(h5file._datasets["elec_cc_nu"], new_e)
@@ -389,7 +389,7 @@ function fill_HDF5_file!(h5file::H5File, f::KM3io.OscOpenDataTree, hs::Histogram
             end
                 	
         elseif filetype=="atm_muons"
-            new_e = ResponseMatrixBinMuons(Ereco, zdirreco, e.AnaClass, e.W, e.Werr)
+            new_e = ResponseMatrixBinMuons(Ereco, zdirreco, e.AnaClass, e.W, e.WE)
             push!(h5file._datasets["atm_muons"], new_e)
         elseif filetype=="data"
             new_e = ResponseMatrixBinData(Ereco, zdirreco, e.AnaClass, e.W)
