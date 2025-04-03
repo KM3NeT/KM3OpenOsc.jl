@@ -270,9 +270,7 @@ function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillat
         error("Oscillations are enabled, but no PMNS matrix or Hamiltonian was provided.")
     end
 	
-    E = (binedges(hs.hists_true["true"])[1][e.E_true_bin] .* binedges(hs.hists_true["true"])[1][e.E_true_bin+1]).^.5
-	zdir = bincenters(hs.hists_true["true"])[2][e.Ct_true_bin]
-	weight = osc_weight_computation(E, zdir, e.Pdg, e.IsCC, flux_dict, U0, H0, oscillations)
+	weight = osc_weight_computation(e.E_true_bin_center, e.Ct_true_bin_center, e.Pdg, e.IsCC, flux_dict, U0, H0, oscillations)
 	
 
 	new_W = e.W * weight * livetime
