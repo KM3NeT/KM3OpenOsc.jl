@@ -70,6 +70,10 @@ Export histograms to an HDF5 file.
 
 """
 function export_histograms_hdf5(histo::HistogramsOscillations, filename::String)
+    if isfile(filename)
+        @warn "File $filename already exists. It will be overwritten."
+        rm(filename)
+    end
     for (name, hist) in histo.hists_true
         h5writehist(filename, "hists_true/"*name, hist)
     end
@@ -357,6 +361,10 @@ Build an HDF5 file with datasets for neutrino, muon, and data events.
 
 """
 function build_HDF5_file(filename::String="data_MC.h5")
+    if isfile(filename)
+        @warn "File $filename already exists. It will be overwritten."
+        rm(filename)
+    end
     fh5 = KM3io.H5File(filename, "w")
     true_pid = ["elec_cc_nu",
             "elec_cc_nub",
