@@ -5,48 +5,6 @@ const ANUMU_PDGID = Particle("~nu(mu)0").pdgid.value
 const NUTAU_PDGID = Particle("nu(tau)0").pdgid.value
 const ANUTAU_PDGID = Particle("~nu(tau)0").pdgid.value
 
-"""
-
-A concrete type representing a response matrix bin for neutrino events using floats.
-
-"""
-struct ResponseMatrixBinNeutrinos <: ResponseMatrixBin
-    E_reco_bin::Float64
-    Ct_reco_bin::Float64
-    E_true_bin::Float64
-    Ct_true_bin::Float64
-    Pdg::Int16
-    IsCC::Int16
-    AnaClass::Int16
-    W::Float64
-    WE::Float64
-end
-
-"""
-
-A concrete type representing a response matrix bin for muon events. There is no true quantities for muon events using floats.
-
-"""
-struct ResponseMatrixBinMuons <: ResponseMatrixBin
-    E_reco_bin::Float64
-    Ct_reco_bin::Float64
-    AnaClass::Int16
-    W::Float64
-    WE::Float64
-end
-
-"""
-
-A concrete type representing a response matrix bin for data events. There is no true quantities for data events using floats.
-
-"""
-struct ResponseMatrixBinData <: ResponseMatrixBin
-    E_reco_bin::Float64
-    Ct_reco_bin::Float64
-    AnaClass::Int16
-    W::Float64
-end
-
 
 """
 
@@ -315,7 +273,7 @@ function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillat
 
 	new_W = e.W * weight * livetime
 	new_WE = e.WE * weight^2 * livetime^2
-    new_e = KM3io.ResponseMatrixBinNeutrinos(e.E_reco_bin, e.Ct_reco_bin,  e.E_true_bin, e.Ct_true_bin,  e.Pdg, e.IsCC, e.AnaClass, new_W, new_WE)
+    new_e = KM3io.ResponseMatrixBinNeutrinos(e.E_reco_bin, e.Ct_reco_bin,  e.E_reco_bin_center, e.Ct_reco_bin_center,  e.E_true_bin, e.Ct_true_bin,  e.E_true_bin_center, e.Ct_true_bin_center,  e.Pdg, e.IsCC, e.AnaClass, new_W, new_WE)
 
     fill_all_hists_from_event!(hs, new_e)
 
@@ -357,43 +315,35 @@ end
 Fill an HDF5 file with datasets for neutrino, muon, and data events.
 
 """
-function fill_HDF5_file!(h5file::H5File, f::KM3io.OscOpenDataTree, hs::HistogramsOscillations, filetype::String="neutrinos")
+function fill_HDF5_file!(h5file::H5File, f::KM3io.OscOpenDataTree, filetype::String="neutrinos")
     for e in f
-        Ereco = bincenters(hs.hists_reco["reco"])[1][e.E_reco_bin]
-        zdirreco = bincenters(hs.hists_reco["reco"])[2][e.Ct_reco_bin]
         if filetype=="neutrinos"
-            Etrue = (binedges(hs.hists_true["true"])[1][e.E_true_bin] .* binedges(hs.hists_true["true"])[1][e.E_true_bin+1]).^.5
-            zdirtrue = bincenters(hs.hists_true["true"])[2][e.Ct_true_bin]
-
-            new_e = ResponseMatrixBinNeutrinos(Ereco, zdirreco, Etrue, zdirtrue, e.Pdg, e.IsCC, e.AnaClass, e.W, e.WE)
             if Bool(e.IsCC)
                 if Particle(e.Pdg).pdgid.value == Particle("nu(e)0").pdgid.value
-                    push!(h5file._datasets["elec_cc_nu"], new_e)
+                    push!(h5file._datasets["elec_cc_nu"], e)
                 elseif Particle(e.Pdg).pdgid.value == Particle("~nu(e)0").pdgid.value
-                    push!(h5file._datasets["elec_cc_nub"], new_e)
+                    push!(h5file._datasets["elec_cc_nub"], e)
                 elseif Particle(e.Pdg).pdgid.value == Particle("nu(mu)0").pdgid.value
-                    push!(h5file._datasets["muon_cc_nu"], new_e)
+                    push!(h5file._datasets["muon_cc_nu"], e)
                 elseif Particle(e.Pdg).pdgid.value == Particle("~nu(mu)0").pdgid.value
-                    push!(h5file._datasets["muon_cc_nub"], new_e)
+                    push!(h5file._datasets["muon_cc_nub"], e)
                 elseif Particle(e.Pdg).pdgid.value == Particle("nu(tau)0").pdgid.value
-                    push!(h5file._datasets["tau_cc_nu"], new_e)
+                    push!(h5file._datasets["tau_cc_nu"], e)
                 elseif Particle(e.Pdg).pdgid.value == Particle("~nu(tau)0").pdgid.value
-                    push!(h5file._datasets["tau_cc_nub"], new_e)
+                    push!(h5file._datasets["tau_cc_nub"], e)
                 end
             else
                 if Particle(e.Pdg).pdgid.value == Particle("nu(mu)0").pdgid.value
-                    push!(h5file._datasets["nc_nu"], new_e)
+                    push!(h5file._datasets["nc_nu"], e)
                 elseif Particle(e.Pdg).pdgid.value == Particle("~nu(mu)0").pdgid.value
-                    push!(h5file._datasets["nc_nub"], new_e)
+                    push!(h5file._datasets["nc_nub"], e)
                 end
             end
                 	
         elseif filetype=="atm_muons"
-            new_e = ResponseMatrixBinMuons(Ereco, zdirreco, e.AnaClass, e.W, e.WE)
-            push!(h5file._datasets["atm_muons"], new_e)
+            push!(h5file._datasets["atm_muons"], e)
         elseif filetype=="data"
-            new_e = ResponseMatrixBinData(Ereco, zdirreco, e.AnaClass, e.W)
-            push!(h5file._datasets["data"], new_e)
+            push!(h5file._datasets["data"], e)
 
         end
     end
@@ -418,9 +368,9 @@ function build_HDF5_file(filename::String="data_MC.h5")
             "tau_cc_nub",
     ]
     for pid in true_pid
-        KM3io.create_dataset(fh5, pid, ResponseMatrixBinNeutrinos)
+        KM3io.create_dataset(fh5, pid, KM3io.ResponseMatrixBinNeutrinos)
     end
-    KM3io.create_dataset(fh5, "atm_muons", ResponseMatrixBinMuons)
-    KM3io.create_dataset(fh5, "data", ResponseMatrixBinData)
+    KM3io.create_dataset(fh5, "atm_muons", KM3io.ResponseMatrixBinMuons)
+    KM3io.create_dataset(fh5, "data", KM3io.ResponseMatrixBinData)
     return fh5
 end
