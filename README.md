@@ -34,41 +34,80 @@ julia> using KM3OpenOsc
 
 ## Quick example with KM3NeT Test data
 
+First we load the packages needed
+
 ```julia
 using KM3OpenOsc
 using KM3io
 using KM3NeTTestData
 using NuFlux
+```
+
+Set up a couple of paths to load files from the test data
+
+```julia
 
 OSCFILE = KM3NeTTestData.datapath("oscillations", "ORCA6_433kt-y_opendata_v0.5_testdata.root")
 BINDEF = KM3NeTTestData.datapath("oscillations", "bins_433kt-y_v0.4.json")
+```
 
+We can now load the open data file and check its contents
+
+```julia
 f = KM3io.OSCFile(OSCFILE)
 nu = f.osc_opendata_nu
 data = f.osc_opendata_data
+```
 
+Given the file of binning definition we can create a set of histograms for reco and true fiven the datasample
+
+```julia
 hn = create_histograms(BINDEF)
 hd = create_histograms(BINDEF)
+```
 
+A set of oscillations parameters can be given as an argument for the `get_oscillation_matrices` function which computes matrices used to compute oscillations probabilities.
+This function uses `Neurthino.jl` behind the scenes
+
+```julia
 BF = Dict("dm_21" => 7.42e-5, #ORCA 433 kt-y standard oscillations Best Fit
                        "dm_31" => 2.18e-3,
                        "theta_12" => deg2rad(33.45),
                        "theta_23" => deg2rad(45.57299599919429),
                        "theta_13" => deg2rad(8.62),
                        "dcp" => deg2rad(230))
+U,H = get_oscillation_matrices(BF) # If no dict of parameters is provided NuFit is selected by default
+```
 
+The package also allows to input any Honda flux for any site. 
+Local files may also be used, we just have to give the right path to the `get_flux_dict` function.
+
+```julia
 NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
 FLUX_DATA_DIR = joinpath(NUFLUX_PATH, "data")
 flux_path = joinpath(FLUX_DATA_DIR, "frj-ally-20-12-solmin.d") # Get flux of Honda Frejus site from NuFlux
 
 flux_dict = get_flux_dict(flux_path) # If no flux path is provided, Honda flux at frejus site is taken by default
-U,H = get_oscillation_matrices(BF) # If no dict of parameters is provided NuFit is selected by default
+```
 
-fill_response!(hn, nu, flux_dict, U, H; oscillations=true, livetime=1.39) # fill neutrinos ,need flux, oscillation parameters and livetime
+Once all the ingredients have been computed we can fill the initialized histograms.
+`fill_response!` will take care of filling all the empty histograms for true and reco quantities depending on the dataset given.
+
+```julia
+fill_response!(hn, nu, flux_dict, U, H; oscillations=true) # fill neutrinos ,need flux and oscillation parameters
 fill_response!(hd, data) # fill data, don't need to specify much
+```
+We can also export the histograms to HDF5 using the `export_histograms_hdf5` function:
+
+```julia
 export_histograms_hdf5(hn, "neutrino_histograms_from_testdata.h5") # You can easily export the filled histograms to hdf5
+```
+
+Additionally, the initial response file can be exported to HDF5 directly
+
+```julia
 h5f = build_HDF5_file("responses_to_file.h5") # Create h5 file with same structure as responses bins 
-fill_HDF5_file!(h5f, nu, hn, "neutrinos") # Completely export the response as a table in an hdf5 file at a given path 
-fill_HDF5_file!(h5f, data, hd, "data") # Completely export the response as a table in an hdf5 file at a given path 
+fill_HDF5_file!(h5f, nu, "neutrinos") # Completely export the response as a table in an hdf5 file at a given path 
+fill_HDF5_file!(h5f, data, "data") # Completely export the response as a table in an hdf5 file at a given path 
 close(h5f)
 ```
