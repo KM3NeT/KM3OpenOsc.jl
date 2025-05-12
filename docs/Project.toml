@@ -9,3 +9,4 @@ NuFlux = "efbbe403-48f9-4d1c-bbe5-17d2c19d1ebf"
 
 [compat]
 Documenter = "1"
+KM3NeTTestData = "^0.4.20"
