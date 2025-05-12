@@ -81,9 +81,6 @@ Julia 1.11:
 docs:
   image: git.km3net.de:4567/common/dockerfiles/base/julia:1.11-tex
   stage: docs
-  before_script:
-  - mkdir -p ~/.ssh
-  - ssh-keyscan git.km3net.de >> ~/.ssh/known_hosts
   script:
     - |
       julia -e '
