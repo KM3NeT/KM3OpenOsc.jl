@@ -1,4 +1,5 @@
 using Documenter, KM3OpenOsc
+import Pkg; Pkg.add("PlutoStaticHTML")
 using PlutoStaticHTML
 
 const NOTEBOOK_DIR = joinpath(@__DIR__, "src","notebooks")
