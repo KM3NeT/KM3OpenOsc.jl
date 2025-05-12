@@ -1,4 +1,18 @@
 using Documenter, KM3OpenOsc
+using PlutoStaticHTML
+
+const NOTEBOOK_DIR = joinpath(@__DIR__, "src","notebooks")
+
+function build()
+    println("Building notebooks in $NOTEBOOK_DIR")
+    oopts = OutputOptions(; append_build_context=true)
+    output_format = documenter_output
+    bopts = BuildOptions(NOTEBOOK_DIR; output_format)
+    build_notebooks(bopts, oopts)
+    return nothing
+end
+
+build()
 
 makedocs(;
     modules = [KM3OpenOsc],
@@ -9,12 +23,13 @@ makedocs(;
         sidebar_sitename = true,
         collapselevel = 2,
         warn_outdated = true,
+       size_threshold = 1000_000,
     ),
     warnonly = [:missing_docs],
     pages = [
         "Home" => "index.md",
-        "API" => "api.md"
-        #"Examples" => "notebooks/example_read_and_plot.html"
+        "API" => "api.md",
+        "Examples" => "notebooks/example_read_and_plot.md"
     ],
     repo = Documenter.Remotes.URL(
         "https://git.km3net.de/common/KM3OpenOsc.jl/blob/{commit}{path}#L{line}",
