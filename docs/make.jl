@@ -1,20 +1,4 @@
 using Documenter, KM3OpenOsc
-using Pkg; Pkg.Registry.add(); Pkg.Registry.add(RegistrySpec(url = "https://git.km3net.de/common/julia-registry"))
-import Pkg; Pkg.add("PlutoStaticHTML")
-using PlutoStaticHTML
-
-const NOTEBOOK_DIR = joinpath(@__DIR__, "src","notebooks")
-
-function build()
-    println("Building notebooks in $NOTEBOOK_DIR")
-    oopts = OutputOptions(; append_build_context=true)
-    output_format = documenter_output
-    bopts = BuildOptions(NOTEBOOK_DIR; output_format)
-    build_notebooks(bopts, oopts)
-    return nothing
-end
-
-build()
 
 makedocs(;
     modules = [KM3OpenOsc],
