@@ -6,8 +6,6 @@ using InteractiveUtils
 
 # ╔═╡ 8f0702a2-106d-11f0-3185-79567a9bebe4
 begin
-
-    using Pkg; Pkg.Registry.add(); Pkg.Registry.add(RegistrySpec(url = "https://git.km3net.de/common/julia-registry")); Pkg.add(["KM3io","NuFlux","KM3OpenOsc","KM3NeTTestData","CairoMakie","FHist"])
 	using KM3io
 	using NuFlux
 	using KM3OpenOsc
