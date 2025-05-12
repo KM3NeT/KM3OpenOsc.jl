@@ -1,6 +1,5 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-KM3OpenOsc = "f3e63bb9-bba0-4fef-92d7-12bec46c3825"
 
 [compat]
 Documenter = "1"
