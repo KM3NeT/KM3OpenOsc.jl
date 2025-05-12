@@ -1,5 +1,5 @@
 using Documenter, KM3OpenOsc
-using Pkg; Pkg.Registry.add(); Pkg.Registry.add(RegistrySpec(url = "https://git.km3net.de/common/julia-registry")); Pkg.add(["KM3io", "NuFlux","KM3NeTTestData","KM3OpenOsc"])
+using Pkg; Pkg.Registry.add(); Pkg.Registry.add(RegistrySpec(url = "https://git.km3net.de/common/julia-registry")); Pkg.add(["KM3io", "NuFlux","KM3NeTTestData"])
 import Pkg; Pkg.add("PlutoStaticHTML")
 using PlutoStaticHTML
 
