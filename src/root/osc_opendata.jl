@@ -97,10 +97,10 @@ end
 Fill all histograms based on an event.
 
 """
-function fill_all_hists_from_event!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin; livetime::Float64=1.)
-    W = e.W * livetime
+function fill_all_hists_from_event!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin; MC_scaling::Float64=1.)
+    W = e.W * MC_scaling
     if hasproperty(e,:WE)
-        WE = e.WE * livetime^2
+        WE = e.WE * MC_scaling^2
     else
         WE = e.W^2
     end
@@ -155,14 +155,14 @@ end
 Fill histograms with events from an `KM3io.OscOpenDataTree`, optionally applying oscillations and flux weights.
 
 """
-function fill_response!(hs::HistogramsOscillations, f::KM3io.OscOpenDataTree,  flux_dict::Union{Dict, Nothing}=nothing, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Union{Bool, Nothing}=true, livetime::Union{Float64, Nothing}=1.)
+function fill_response!(hs::HistogramsOscillations, f::KM3io.OscOpenDataTree,  flux_dict::Union{Dict, Nothing}=nothing, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Union{Bool, Nothing}=true, MC_scaling::Union{Float64, Nothing}=1.)
     if f.tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_NU
         for e in f
-           fill_all_hists_from_event_oscillations_and_flux!(hs, e, flux_dict, U0, H0; oscillations=oscillations, livetime=livetime)
+           fill_all_hists_from_event_oscillations_and_flux!(hs, e, flux_dict, U0, H0; oscillations=oscillations, MC_scaling=MC_scaling)
         end
     else
         for e in f
-            fill_all_hists_from_event!(hs, e; livetime=livetime)
+            fill_all_hists_from_event!(hs, e; MC_scaling=MC_scaling)
         end
     end
 end
@@ -264,7 +264,7 @@ end
 Fill histograms for an event, applying oscillations and flux weights.
 
 """
-function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin, flux_dict::Dict, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Bool=true, livetime::Float64=1.)
+function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillations, e::KM3io.ResponseMatrixBin, flux_dict::Dict, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Bool=true, MC_scaling::Float64=1.)
 
     if oscillations && (U0 == nothing || H0 == nothing)
         error("Oscillations are enabled, but no PMNS matrix or Hamiltonian was provided.")
@@ -273,8 +273,8 @@ function fill_all_hists_from_event_oscillations_and_flux!(hs::HistogramsOscillat
 	weight = osc_weight_computation(e.E_true_bin_center, e.Ct_true_bin_center, e.Pdg, e.IsCC, flux_dict, U0, H0, oscillations)
 	
 
-	new_W = e.W * weight * livetime
-	new_WE = e.WE * weight^2 * livetime^2
+	new_W = e.W * weight * MC_scaling
+	new_WE = e.WE * weight^2 * MC_scaling^2
     new_e = KM3io.ResponseMatrixBinNeutrinos(e.E_reco_bin, e.Ct_reco_bin,  e.E_reco_bin_center, e.Ct_reco_bin_center,  e.E_true_bin, e.Ct_true_bin,  e.E_true_bin_center, e.Ct_true_bin_center,  e.Pdg, e.IsCC, e.AnaClass, new_W, new_WE)
 
     fill_all_hists_from_event!(hs, new_e)

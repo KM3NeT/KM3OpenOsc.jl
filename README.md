@@ -111,3 +111,7 @@ fill_HDF5_file!(h5f, nu, "neutrinos") # Completely export the response as a tabl
 fill_HDF5_file!(h5f, data, "data") # Completely export the response as a table in an hdf5 file at a given path 
 close(h5f)
 ```
+
+###  More detailed example
+
+See an more detailed example on how to read and plot the data [here](https://km3openosc-jl-fd9d00.pages.km3net.de/dev/notebooks/example_read_and_plot/).
