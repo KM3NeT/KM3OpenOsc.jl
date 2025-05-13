@@ -115,3 +115,8 @@ close(h5f)
 ###  More detailed example
 
 See an more detailed example on how to read and plot the data [here](https://km3openosc-jl-fd9d00.pages.km3net.de/dev/notebooks/example_read_and_plot/).
+
+## License and Disclaimer
+
+This project is licensed under the terms of the [BSD 3-clause](/LICENSE) license. Be aware that KM3NeT is currently under construction and data taking and processing are still under development. The presented data have been tested to the best current standards. However, the KM3NeT collaboration gives no warranty for the re-use of the data and does not endorse any third-party scientific findings based on the use of the presented data.
+
