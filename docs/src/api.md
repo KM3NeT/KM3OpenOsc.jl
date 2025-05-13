@@ -18,4 +18,6 @@ build_HDF5_file
 export_histograms_hdf5
 create_histograms
 fill_response!
+fill_HDF5_file!
+osc_weight_computation
 ```
