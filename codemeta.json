@@ -1,0 +1,73 @@
+{
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "@type": "SoftwareSourceCode",
+    "license": "https://spdx.org/licenses/BSD-3-Clause",
+    "codeRepository": "https://git.km3net.de/common/KM3OpenOsc.jl",
+    "dateCreated": "2025-05-13",
+    "datePublished": "2025-05-13",
+    "dateModified": "2025-05-13",
+    "downloadUrl": "https://git.km3net.de/common/KM3OpenOsc.jl",
+    "issueTracker": "https://git.km3net.de/common/KM3OpenOsc.jl/issues",
+    "name": "Data for the KM3-230213A high energy event observation",
+    "version": "1.0.0",
+    "description": "This repository contains a package developed for the histogram filling operations related to oscillations data releases for KM3NeT/ORCA",
+    "applicationCategory": "Particle physics",
+    "releaseNotes": "First commit in line with analysis data release.",
+    "developmentStatus": "active",
+    "readme": "https://git.km3net.de/common/KM3OpenOsc.jl/README.md",
+    "softwareVersion": "0.1.9",
+    "keywords": [
+        "KM3NeT",
+        "neutrinos",
+        "oscillations"
+    ],
+    "programmingLanguage": [
+        "Julia"
+    ],
+    "operatingSystem": [
+        "Linux",
+        "Windows"
+    ],
+    "softwareRequirements": [
+        "Julia 1.8"
+    ],
+    "author": [
+       {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0001-8939-0639",
+            "givenName": "Santiago",
+            "familyName": "Peña Martínez",
+            "email": "spenam@apc.in2p3.fr",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Astroparticule et Cosmologie, Université Paris Cité"
+            }
+        }
+    ],
+    "contributor": [
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0001-8939-0639",
+            "givenName": "Santiago",
+            "familyName": "Peña Martínez",
+            "email": "spenam@apc.in2p3.fr",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Astroparticule et Cosmologie, Université Paris Cité"
+            }
+        }
+    ],
+    "maintainer": [
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0001-8939-0639",
+            "givenName": "Santiago",
+            "familyName": "Peña Martínez",
+            "email": "spenam@apc.in2p3.fr",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Astroparticule et Cosmologie, Université Paris Cité"
+            }
+        }
+    ]
+}
