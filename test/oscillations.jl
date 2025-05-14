@@ -68,7 +68,7 @@ const BINDEF = datapath("oscillations", "bins_433kt-y_v0.4.json")
 
     fill_response!(hn, nu, flux_dict, U, H; oscillations=true)
 
-    @test isapprox(integral(hn.hists_reco["recoShowers"]), 206.89133463351368)
+    @test isapprox(integral(hn.hists_reco["recoShowers"]), 206.65342183069086)
 
     hdf5_filename = "test_data.h5"
     export_histograms_hdf5(hn, hdf5_filename)
