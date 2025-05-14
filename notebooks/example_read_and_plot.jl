@@ -129,7 +129,7 @@ Any Honda formatted table can be read using this function. It uses `NuFlux.jl` b
 begin
 	NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
 	FLUX_DATA_DIR = joinpath(NUFLUX_PATH, "data")
-	flux_path = joinpath(FLUX_DATA_DIR, "frj-ally-20-12-solmin.d") # Get flux of Honda Frejus site from NuFlux
+	flux_path = joinpath(FLUX_DATA_DIR, "frj-nu-20-01-000.d") # Get flux of Honda Frejus site from NuFlux
 	flux_dict = get_flux_dict(flux_path)
 end
 
@@ -271,9 +271,9 @@ NuFlux = "efbbe403-48f9-4d1c-bbe5-17d2c19d1ebf"
 CairoMakie = "~0.13.2"
 FHist = "~0.11.9"
 KM3NeTTestData = "~0.4.21"
-KM3OpenOsc = "~0.1.4"
-KM3io = "~0.18.3"
-NuFlux = "~0.1.5"
+KM3OpenOsc = "^0.1.8"
+KM3io = "^0.18.3"
+NuFlux = "^0.1.6"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -1464,7 +1464,7 @@ version = "1.0.1"
 deps = ["Corpuscles", "DelimitedFiles", "DocStringExtensions", "Interpolations", "LRUCache", "Statistics", "StatsBase"]
 git-tree-sha1 = "7675bfa873c4555fcbc37e08e99601ac465d7686"
 uuid = "efbbe403-48f9-4d1c-bbe5-17d2c19d1ebf"
-version = "0.1.5"
+version = "0.1.6"
 
 [[deps.Observables]]
 git-tree-sha1 = "7438a59546cf62428fc9d1bc94729146d37a7225"

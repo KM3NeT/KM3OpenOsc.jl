@@ -177,7 +177,7 @@ function get_flux_dict(flux_path::String="")
     if flux_path == ""
         NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
         FLUX_DATA_DIR = joinpath(NUFLUX_PATH, "data")
-        flux_path = joinpath(FLUX_DATA_DIR, "frj-ally-20-12-solmin.d")
+        flux_path = joinpath(FLUX_DATA_DIR, "frj-nu-20-01-000.d")
     end
     return NuFlux.readfluxfile(flux_path)
 end
@@ -233,7 +233,7 @@ function osc_weight_computation(E::Float64, zdir::Float64, Pdg::Int16, IsCC::Int
     		elseif abs(Pdg)==NUTAU_PDGID
     			nuout=3
     		end
-    		flux_value = NuFlux.flux(flux_dict[flav * sign(Pdg)], E, zdir; interpol=true)
+    		flux_value = NuFlux.flux(flux_dict[flav * sign(Pdg)], E, zdir; interpol=true, interpol_method="linear", interp_logflux=true)
     		if (IsCC > 0)
     			osc_prob_cc = osc_values[1,1,nuin, nuout]
     			weight += flux_value*osc_prob_cc
@@ -246,11 +246,11 @@ function osc_weight_computation(E::Float64, zdir::Float64, Pdg::Int16, IsCC::Int
             weight = 0
         else
     		if (IsCC > 0)
-                flux_value = NuFlux.flux(flux_dict[Pdg], E, zdir; interpol=true)
+                flux_value = NuFlux.flux(flux_dict[Pdg], E, zdir; interpol=true, interpol_method="linear", interp_logflux=true)
                 weight += flux_value
             else
                 for flav in [NUE_PDGID, NUMU_PDGID]
-                    flux_value = NuFlux.flux(flux_dict[flav * sign(Pdg)], E, zdir; interpol=true)
+                    flux_value = NuFlux.flux(flux_dict[flav * sign(Pdg)], E, zdir; interpol=true, interpol_method="linear", interp_logflux=true)
                     weight += flux_value
                 end
             end

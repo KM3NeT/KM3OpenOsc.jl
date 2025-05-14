@@ -85,7 +85,7 @@ Local files may also be used, we just have to give the right path to the `get_fl
 ```julia
 NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
 FLUX_DATA_DIR = joinpath(NUFLUX_PATH, "data")
-flux_path = joinpath(FLUX_DATA_DIR, "frj-ally-20-12-solmin.d") # Get flux of Honda Frejus site from NuFlux
+flux_path = joinpath(FLUX_DATA_DIR, "frj-nu-20-01-000.d") # Get flux of Honda Frejus site from NuFlux
 
 flux_dict = get_flux_dict(flux_path) # If no flux path is provided, Honda flux at frejus site is taken by default
 ```
