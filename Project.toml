@@ -1,7 +1,7 @@
 name = "KM3OpenOsc"
 uuid = "f3e63bb9-bba0-4fef-92d7-12bec46c3825"
 authors = ["Santiago Pena Martinez <spenam@apc.in2p3.fr>"]
-version = "0.1.8"
+version = "0.1.9"
 
 [deps]
 Corpuscles = "e78a0372-c628-4773-9c8d-eb17d149bf93"
