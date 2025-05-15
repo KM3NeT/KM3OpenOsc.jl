@@ -170,8 +170,13 @@ end
 
 """
 
-Retrieve a dictionary of neutrino fluxes from the Honda flux model.
+Retrieve a dictionary of neutrino fluxes from the Honda flux model file given as input.
 
+# Inputs
+- `flux_path::String`: String of path to input flux file.
+
+# Notes
+- If no input is given, default argument is the Honda flux at Frejus site without mountain at solar-min with averaged azimuth.
 """
 function get_flux_dict(flux_path::String="")
     if flux_path == ""
@@ -185,10 +190,25 @@ end
 
 """
 
-Compute the PMNS matrix and Hamiltonian for neutrino oscillations.
+Compute the PMNS matrix and Hamiltonian for neutrino oscillations for a given input dictionary containing the parameters of neutrino oscillations.
+
+# Inputs
+- `nu_params::Dict`: Dictionary of oscillation parameters
+
+# Example input
+```julia-repl
+NuFitv5 = Dict(
+    "dm_21" => 7.42e-5,
+    "dm_31" => 2.510e-3,
+    "theta_12" => deg2rad(33.45),
+    "theta_23" => deg2rad(42.1),
+    "theta_13" => deg2rad(8.62),
+    "dcp" => deg2rad(230)
+)
+```
 
 # Notes
-- Default parameters are based on NuFit v5.1 results http://www.nu-fit.org/?q=node/238.
+- If no input is given, default parameters are based on NuFit v5.1 results http://www.nu-fit.org/?q=node/238.
 """
 function get_oscillation_matrices(nu_params::Dict=Dict(
 		"dm_21" => 7.42e-5,
