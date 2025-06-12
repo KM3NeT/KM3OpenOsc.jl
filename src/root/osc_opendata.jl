@@ -159,7 +159,7 @@ Fill histograms with events from an `KM3io.OscOpenDataTree`, optionally applying
 - `f::KM3io.OscOpenDataTree`: Struct containing the bins with the weights to fill. 
 - `flux_dict::Dict (optional)`: If filling neutrinos from MC, `flux_dict` contains the information of the atmospheric neutrino flux to use to compute the event weights.
 - `U0::Matrix{ComplexF64} (optional)`: If filling neutrinos from MC, `U0` corresponds to the precomputed PMNS matrix
-- `H0::Vector{ComplexF64} (optional)`: If filling neutrinos from MC, `H0` corresponds to the precomputed hamiltonian.
+- `H0::Vector{ComplexF64} (optional)`: If filling neutrinos from MC, `H0` corresponds to the precomp of propagationuted hamiltonian.
 - `oscillations::Bool (optional)`: Boolean to whether compute the weights using oscillations or not.
 - `MC_scaling::Float64 (optional)`: If doing sensitivity studies, this argument allows to scale the MC by a certain value.
 
@@ -354,6 +354,11 @@ end
 """
 
 Fill an HDF5 file with datasets for neutrino, muon, and data events.
+
+# Inputs
+- `h5file::H5File`: H5File which will store the datasets. If the file already exists, datasets with same name will be overwritten.
+- `f::KM3io.OscOpenDataTree`: Structured information of the response matrix.
+- `filetype::String`: Name of the response to be stored. Default name is `neutrinos`
 
 """
 function fill_HDF5_file!(h5file::H5File, f::KM3io.OscOpenDataTree, filetype::String="neutrinos")
