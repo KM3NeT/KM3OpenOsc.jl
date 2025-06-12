@@ -154,6 +154,15 @@ end
 
 Fill histograms with events from an `KM3io.OscOpenDataTree`, optionally applying oscillations and flux weights.
 
+# Inputs
+- `hs::HistogramsOscillations`: Histogram structure to fill
+- `f::KM3io.OscOpenDataTree`: Struct containing the bins with the weights to fill. 
+- `flux_dict::Dict (optional)`: If filling neutrinos from MC, `flux_dict` contains the information of the atmospheric neutrino flux to use to compute the event weights.
+- `U0::Matrix{ComplexF64} (optional)`: If filling neutrinos from MC, `U0` corresponds to the precomputed PMNS matrix
+- `H0::Vector{ComplexF64} (optional)`: If filling neutrinos from MC, `H0` corresponds to the precomputed hamiltonian.
+- `oscillations::Bool (optional)`: Boolean to whether compute the weights using oscillations or not.
+- `MC_scaling::Float64 (optional)`: If doing sensitivity studies, this argument allows to scale the MC by a certain value.
+
 """
 function fill_response!(hs::HistogramsOscillations, f::KM3io.OscOpenDataTree,  flux_dict::Union{Dict, Nothing}=nothing, U0::Union{Matrix{ComplexF64}, Nothing}=nothing, H0::Union{Vector{ComplexF64}, Nothing}=nothing; oscillations::Union{Bool, Nothing}=true, MC_scaling::Union{Float64, Nothing}=1.)
     if f.tpath == KM3io.ROOT.TTREE_OSC_OPENDATA_NU
@@ -206,6 +215,10 @@ NuFitv5 = Dict(
     "dcp" => deg2rad(230)
 )
 ```
+
+# Outputs
+- `U::Matrix{ComplexF64}`: PMNS matrix computed from the input oscillation parameters.
+- `H::Vector{ComplexF64}`: Form of the Hamiltonian of propagation.
 
 # Notes
 - If no input is given, default parameters are based on NuFit v5.1 results http://www.nu-fit.org/?q=node/238.
@@ -303,7 +316,13 @@ end
 
 """
 
-Create histograms from either a ROOT file or a JSON file.
+Create histograms needed for detector response for oscillations analysis from either a ROOT file or a JSON file.
+
+# Inputs
+- `fpath::String`: String to ROOT file or JSON file containing the definition of the true and reco axes for the histograms.
+
+# Outputs
+- `HistogramsOscillations`: Structure containing two dictionaries (`hists_true` and `hists_reco`), each structure will contain the empty histograms for each case to fill.
 
 """
 function create_histograms(fpath::String)
