@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Example with test data · KM3OpenOsc.jl</title><meta name="title" content="Example with test data · KM3OpenOsc.jl"/><meta property="og:title" content="Example with test data · KM3OpenOsc.jl"/><meta property="twitter:title" content="Example with test data · KM3OpenOsc.jl"/><meta name="description" content="Documentation for KM3OpenOsc.jl."/><meta property="og:description" content="Documentation for KM3OpenOsc.jl."/><meta property="twitter:description" content="Documentation for KM3OpenOsc.jl."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/custom.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">KM3OpenOsc.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><a class="tocitem" href="../../api/">API</a></li><li><a class="tocitem" href="../example_read_and_plot_open_data/">Example with open data</a></li><li class="is-active"><a class="tocitem" href>Example with test data</a><ul class="internal"><li><a class="tocitem" href="#Setup-and-Dependencies"><span>Setup and Dependencies</span></a></li><li><a class="tocitem" href="#Loading-Data-Files"><span>Loading Data Files</span></a></li><li><a class="tocitem" href="#Reading-the-Oscillation-Data-File"><span>Reading the Oscillation Data File</span></a></li><li><a class="tocitem" href="#Creating-Histogram-Containers"><span>Creating Histogram Containers</span></a></li><li><a class="tocitem" href="#Setting-Oscillation-Parameters"><span>Setting Oscillation Parameters</span></a></li><li><a class="tocitem" href="#Loading-Neutrino-Flux-Model"><span>Loading Neutrino Flux Model</span></a></li><li><a class="tocitem" href="#Filling-Histograms-with-Events"><span>Filling Histograms with Events</span></a></li><li><a class="tocitem" href="#Exporting-results-to-hdf5"><span>Exporting results to hdf5</span></a></li><li><a class="tocitem" href="#Visualizing-the-Reconstruction-Channels"><span>Visualizing the Reconstruction Channels</span></a></li><li><a class="tocitem" href="#Examining-True-Event-Categories"><span>Examining True Event Categories</span></a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Example with test data</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Example with test data</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://git.km3net.de/common/KM3OpenOsc.jl" title="View the repository"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">Repository</span></a><a class="docs-navbar-link" href="https://git.km3net.de/common/KM3OpenOsc.jl/blob/main/docs/src/notebooks/example_read_and_plot.md#L" title="Edit source"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><style>
+    #documenter-page table {
+        display: table !important;
+        margin: 2rem auto !important;
+        border-top: 2pt solid rgba(0,0,0,0.2);
+        border-bottom: 2pt solid rgba(0,0,0,0.2);
+    }
+
+    #documenter-page pre, #documenter-page div {
+        margin-top: 1.4rem !important;
+        margin-bottom: 1.4rem !important;
+    }
+
+    .code-output {
+        padding: 0.7rem 0.5rem !important;
+    }
+
+    .admonition-body {
+        padding: 0em 1.25em !important;
+    }
+</style>
+
+<!-- PlutoStaticHTML.Begin -->
+<!--
+    # This information is used for caching.
+    [PlutoStaticHTML.State]
+    input_sha = "c2712983266fa832ab1f568f2264f46ff0e8c1f9db2d191dc01b27cf9d42ee7a"
+    julia_version = "1.11.2"
+-->
+
+<div class="markdown"><h1>KM3NeT Open Test Data</h1><p>This notebook demonstrates read and fill histograms from the ORCA 433 kt-y oscillations data release from the KM3NeT neutrino telescope using KM3NeT's tools.</p></div>
+
+<h2 id="Setup-and-Dependencies"><a class="docs-heading-anchor" href="#Setup-and-Dependencies">Setup and Dependencies</a><a id="Setup-and-Dependencies-1"></a><a class="docs-heading-anchor-permalink" href="#Setup-and-Dependencies" title="Permalink"></a></h2><div class="markdown">
+<p>First, we load the necessary packages:</p><ul><li><p><code>KM3io</code>: For reading KM3NeT data formats</p></li><li><p><code>NuFlux</code>: For neutrino flux calculations</p></li><li><p><code>KM3OpenOsc</code>: For neutrino oscillation calculations</p></li><li><p><code>KM3NeTTestData</code>: For accessing test data</p></li><li><p><code>FHist</code>: For histogram manipulation</p></li><li><p><code>CairoMakie</code>: For later plotting</p></li></ul></div>
+
+<pre class='language-julia'><code class='language-julia'>begin
+    using KM3io
+    using NuFlux
+    using KM3OpenOsc
+    using KM3NeTTestData
+end</code></pre>
+
+
+<h2 id="Loading-Data-Files"><a class="docs-heading-anchor" href="#Loading-Data-Files">Loading Data Files</a><a id="Loading-Data-Files-1"></a><a class="docs-heading-anchor-permalink" href="#Loading-Data-Files" title="Permalink"></a></h2><div class="markdown">
+<p>Here we define paths to two key files:</p><ul><li><p><code>BINDEF</code>: JSON file containing binning definitions for the analysis</p></li><li><p><code>OSCFILE</code>: ROOT file containing data from KM3NeT/ORCA</p></li></ul></div>
+
+
+<h2 id="Reading-the-Oscillation-Data-File"><a class="docs-heading-anchor" href="#Reading-the-Oscillation-Data-File">Reading the Oscillation Data File</a><a id="Reading-the-Oscillation-Data-File-1"></a><a class="docs-heading-anchor-permalink" href="#Reading-the-Oscillation-Data-File" title="Permalink"></a></h2><div class="markdown">
+<p>To read the file we use <code>KM3io.OSCFile</code> which is a function that directly identifies the type of file and what is inside</p><p>We load the oscillation data file and extract three data samples:</p><ul><li><p><code>nu</code>: Neutrino Monte Carlo events</p></li><li><p><code>data</code>: Experimental data events</p></li><li><p><code>muons</code>: Atmospheric muon background events</p></li></ul></div>
+
+<pre class='language-julia'><code class='language-julia'>f = KM3io.OSCFile(OSCFILE)</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash153331">nothing</pre>
+
+<pre class='language-julia'><code class='language-julia'>begin
+    nu = f.osc_opendata_nu
+    data = f.osc_opendata_data
+    muons = f.osc_opendata_muons
+end</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash179017">nothing</pre>
+
+<h2 id="Creating-Histogram-Containers"><a class="docs-heading-anchor" href="#Creating-Histogram-Containers">Creating Histogram Containers</a><a id="Creating-Histogram-Containers-1"></a><a class="docs-heading-anchor-permalink" href="#Creating-Histogram-Containers" title="Permalink"></a></h2><div class="markdown">
+<p>We initialize empty 2D histogram containers using the binning definition file:</p><ul><li><p><code>hn</code>: For simulated neutrino events</p></li><li><p><code>hd</code>: For real experimental data</p></li><li><p><code>hm</code>: For simulated atmospheric muon events</p></li></ul></div>
+
+<pre class='language-julia'><code class='language-julia'>begin
+    hn = create_histograms(BINDEF)
+    hd = create_histograms(BINDEF)
+    hm = create_histograms(BINDEF); nothing
+end</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash140462">nothing</pre>
+
+<pre class='language-julia'><code class='language-julia'>fieldnames(typeof(hn))</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash181202">nothing</pre>
+
+<pre class='language-julia'><code class='language-julia'>keys(hn.hists_reco)</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash383962">nothing</pre>
+
+<pre class='language-julia'><code class='language-julia'>hn.hists_reco["recoShowers"]</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash892691">nothing</pre>
+
+<h2 id="Setting-Oscillation-Parameters"><a class="docs-heading-anchor" href="#Setting-Oscillation-Parameters">Setting Oscillation Parameters</a><a id="Setting-Oscillation-Parameters-1"></a><a class="docs-heading-anchor-permalink" href="#Setting-Oscillation-Parameters" title="Permalink"></a></h2><div class="markdown">
+<p>We define the oscillation parameters using the best fit values from the standard oscillations analysis from ORCA 433 kt-y paper JHEP10(2024)206:</p><ul><li><p><code>dm_21</code>, <code>dm_31</code>: Mass-squared differences in eV²</p></li><li><p><code>theta_12</code>, <code>theta_23</code>, <code>theta_13</code>: Mixing angles</p></li><li><p><code>dcp</code>: CP-violating phase</p></li></ul><p>These parameters are used to calculate the oscillation matrices (U and H). It uses <code>Neurthino.jl</code> behind the scenes.</p></div>
+
+<pre class='language-julia'><code class='language-julia'>begin
+    BF = Dict("dm_21" =&gt; 7.42e-5,
+                       "dm_31" =&gt; 2.18e-3,
+                       "theta_12" =&gt; deg2rad(33.45),
+                       "theta_23" =&gt; deg2rad(45.57299599919429),
+                       "theta_13" =&gt; deg2rad(8.62),
+                       "dcp" =&gt; deg2rad(230))
+
+    U,H = get_oscillation_matrices(BF)
+end</code></pre>
+<pre class="code-output documenter-example-output" id="var-U">(ComplexF64[0.8249422516589652 + 0.0im 0.5449826827686066 + 0.0im -0.09634131252970905 + 0.1148151053225223im; -0.3284406729882627 + 0.06841342277740595im 0.6219810005635141 + 0.04519604930846363im 0.7060759732322109 + 0.0im; 0.449910833254889 + 0.06705856737677285im -0.5586843920183072 + 0.04430098940637267im 0.6920928861894314 + 0.0im], ComplexF64[-0.0007514 + 0.0im, -0.0006772000000000001 + 0.0im, 0.0014286000000000001 + 0.0im])</pre>
+
+<h2 id="Loading-Neutrino-Flux-Model"><a class="docs-heading-anchor" href="#Loading-Neutrino-Flux-Model">Loading Neutrino Flux Model</a><a id="Loading-Neutrino-Flux-Model-1"></a><a class="docs-heading-anchor-permalink" href="#Loading-Neutrino-Flux-Model" title="Permalink"></a></h2><div class="markdown">
+<p>We load the Honda Frejus site flux model, which provides the atmospheric neutrino flux predictions needed for the analysis. Any Honda formatted table can be read using this function. It uses <code>NuFlux.jl</code> behind the scenes.</p></div>
+
+<pre class='language-julia'><code class='language-julia'>begin
+    NUFLUX_PATH = split(Base.pathof(NuFlux), "src")[1]
+    FLUX_DATA_DIR = joinpath(NUFLUX_PATH, "data")
+    flux_path = joinpath(FLUX_DATA_DIR, "frj-nu-20-01-000.d") # Get flux of Honda Frejus site from NuFlux
+    flux_dict = get_flux_dict(flux_path)
+end</code></pre>
+<pre class="code-output documenter-example-output" id="var-FLUX_DATA_DIR">Dict{Int32, NuFlux.FluxTable} with 4 entries:
+  -12 =&gt; FluxTable([-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1  …  0.1,…
+  12  =&gt; FluxTable([-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1  …  0.1,…
+  14  =&gt; FluxTable([-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1  …  0.1,…
+  -14 =&gt; FluxTable([-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1  …  0.1,…</pre>
+
+<h2 id="Filling-Histograms-with-Events"><a class="docs-heading-anchor" href="#Filling-Histograms-with-Events">Filling Histograms with Events</a><a id="Filling-Histograms-with-Events-1"></a><a class="docs-heading-anchor-permalink" href="#Filling-Histograms-with-Events" title="Permalink"></a></h2><div class="markdown">
+<p>We populate our histogram containers with events:</p><ul><li><p>Neutrinos with flux weighting and oscillation effects applied</p></li><li><p>Atmospheric muons</p></li><li><p>Experimental data</p></li></ul><p>There is an optional argument which is livetime that can be used to scale up or down montecarlo</p></div>
+
+<pre class='language-julia'><code class='language-julia'>begin
+    fill_response!(hn, nu, flux_dict, U, H; oscillations=true) # fill neutrinos ,need flux, oscillation parameters
+    fill_response!(hm, muons)
+    fill_response!(hd, data)
+end</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash860418">nothing</pre>
+
+<pre class='language-julia'><code class='language-julia'>hn.hists_true["muon_cc_nu"]</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash404363">nothing</pre>
+
+<pre class='language-julia'><code class='language-julia'>hn.hists_reco["recoShowers"]</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash892691">nothing</pre>
+
+<h2 id="Exporting-results-to-hdf5"><a class="docs-heading-anchor" href="#Exporting-results-to-hdf5">Exporting results to hdf5</a><a id="Exporting-results-to-hdf5-1"></a><a class="docs-heading-anchor-permalink" href="#Exporting-results-to-hdf5" title="Permalink"></a></h2><div class="markdown">
+<p>You can easily export the filled histograms to HDF5.</p><p>Additionally it is possible to export the full response to a single hdf5 file</p></div>
+
+<pre class='language-julia'><code class='language-julia'>begin
+    export_histograms_hdf5(hn, "neutrino_histograms_from_testdata.h5") # You can easily export the filled histograms to hdf5
+    h5f = build_HDF5_file("responses_to_file.h5") # Create h5 file with same structure as responses bins 
+    fill_HDF5_file!(h5f, nu, "neutrinos") # Completely export the response as a table in an hdf5 file at a given path 
+    fill_HDF5_file!(h5f, muons, "muons")
+    fill_HDF5_file!(h5f, data, "data") 
+    close(h5f)
+end</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash107358">nothing</pre>
+
+<h2 id="Visualizing-the-Reconstruction-Channels"><a class="docs-heading-anchor" href="#Visualizing-the-Reconstruction-Channels">Visualizing the Reconstruction Channels</a><a id="Visualizing-the-Reconstruction-Channels-1"></a><a class="docs-heading-anchor-permalink" href="#Visualizing-the-Reconstruction-Channels" title="Permalink"></a></h2><div class="markdown">
+<p>CAVEAT: These plots are done with a test data sample, meaning it does not contain all events which will render the distributions to be different from the actual analysis.</p><p>This plot shows three different reconstruction channels:</p><ol><li><p>High Purity Tracks: Events classified with track topology with low atmospheric muon contamination</p></li><li><p>Low Purity Tracks: Events classified with track topology with higher atmospheric muon contamination</p></li><li><p>Showers: Events classified with a shower topology</p></li></ol><p>For each channel, we display:</p><ul><li><p>Stacked histograms of neutrino and muon Monte Carlo events</p></li><li><p>Data points with error bars</p></li></ul><p>The x-axis represents the cosine of the zenith angle (cos θ), where -1 means upgoing events (through the Earth) and 0 means horizontal events.</p></div>
+
+<pre class='language-julia'><code class='language-julia'>using CairoMakie, FHist</code></pre>
+
+
+<pre class='language-julia'><code class='language-julia'>with_theme(ATLASTHEME) do
+    reco_types = ["recoHighPurityTracks", "recoLowPurityTracks", "recoShowers"]
+     f = Figure(size = (1200, 400))
+
+    for (i, reco_type) in enumerate(reco_types)
+        neutrinos = project(hn.hists_reco[reco_type],:y)
+        muons = project(hm.hists_reco[reco_type],:y)
+        data = project(hd.hists_reco[reco_type],:y)
+        ax = Axis(f[1, i], 
+                 xlabel = "Cos theta", 
+                 ylabel = i == 1 ? "Event count" : "", 
+                 title = reco_type)
+        p = stackedhist!(ax, [neutrinos, muons]; error_color=Pattern('/'))
+        xlims!(ax, (-1, 0))
+        scatter!(ax, bincenters(data), bincounts(data), 
+                 color = :black, 
+                 markersize = 10)
+        if i == 3
+            labels = ["Neutrinos", "Muons", "Data"]
+            elements = [
+                [PolyElement(polycolor = p.attributes.color[][j]) for j in 1:2]..., 
+                MarkerElement(color = :black, marker = :circle, markersize = 8)
+            ]
+        end
+    end
+    f
+end</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash132083">nothing</pre>
+
+<h2 id="Examining-True-Event-Categories"><a class="docs-heading-anchor" href="#Examining-True-Event-Categories">Examining True Event Categories</a><a id="Examining-True-Event-Categories-1"></a><a class="docs-heading-anchor-permalink" href="#Examining-True-Event-Categories" title="Permalink"></a></h2><div class="markdown">
+<p>CAVEAT: These plots are done with a test data sample, meaning it does not contain all events which will render the distributions to be different from the actual analysis.</p><p>This plot shows the distribution of true Monte Carlo event categories:</p><ol><li><p>muon_cc_nu: Charged-current muon neutrino events</p></li><li><p>muon_cc_nub: Charged-current muon antineutrino events</p></li></ol></div>
+
+<pre class='language-julia'><code class='language-julia'>with_theme(ATLASTHEME) do
+    reco_types = ["muon_cc_nu", "muon_cc_nub"]
+     f = Figure(size = (1200, 400))
+    # Loop through each reconstruction type
+    for (i, reco_type) in enumerate(reco_types)
+        muon_cc_nu = project(hn.hists_true[reco_type],:y)
+        muon_cc_nub = project(hm.hists_true[reco_type],:y)
+        ax = Axis(f[1, i], 
+                 xlabel = "Cos theta", 
+                 ylabel = i == 1 ? "Event count" : "", 
+                 title = reco_type)
+        p = stackedhist!(ax, [muon_cc_nu, muon_cc_nub]; error_color=Pattern('/'))
+        xlims!(ax, (-1, 0))
+        if i == 3
+            labels = ["muon_cc_nu", "muon_cc_nub"]
+            elements = [
+                [PolyElement(polycolor = p.attributes.color[][j]) for j in 1:2]..., 
+                MarkerElement(color = :black, marker = :circle, markersize = 8)
+            ]
+        end
+    end
+    f
+end</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash372987">nothing</pre>
+<div class='manifest-versions'>
+<p>Built with Julia 1.11.2 and</p>
+CairoMakie 0.13.5<br>
+FHist 0.11.10<br>
+KM3NeTTestData 0.4.21<br>
+KM3OpenOsc 0.1.9<br>
+KM3io 0.18.6<br>
+NuFlux 0.1.6
+</div>
+
+<!-- PlutoStaticHTML.End --></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../example_read_and_plot_open_data/">« Example with open data</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Thursday 12 June 2025 23:19">Thursday 12 June 2025</span>. Using Julia version 1.11.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
