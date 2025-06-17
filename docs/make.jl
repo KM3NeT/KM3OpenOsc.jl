@@ -31,7 +31,7 @@ makedocs(;
         "Home" => "index.md",
         "API" => "api.md",
         "Example with open data" => "notebooks/example_read_and_plot_open_data.md",
-        "Example with test data" => "notebooks/example_read_and_plot.md"
+        #"Example with test data" => "notebooks/example_read_and_plot.md"
     ],
     repo = Documenter.Remotes.URL(
         "https://git.km3net.de/common/KM3OpenOsc.jl/blob/{commit}{path}#L{line}",
