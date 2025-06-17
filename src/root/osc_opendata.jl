@@ -160,7 +160,7 @@ Fill histograms with events from an `KM3io.OscOpenDataTree`, optionally applying
 - `flux_dict::Dict (optional)`: If filling neutrinos from MC, `flux_dict` contains the information of the atmospheric neutrino flux to use to compute the event weights.
 - `U0::Matrix{ComplexF64} (optional)`: If filling neutrinos from MC, `U0` corresponds to the precomputed PMNS matrix
 - `H0::Vector{ComplexF64} (optional)`: If filling neutrinos from MC, `H0` corresponds to the precomp of propagationuted hamiltonian.
-- `oscillations::Bool (optional)`: Boolean to whether compute the weights using oscillations or not.
+- `oscillations::Bool (optional)`: Boolean to whether compute the weights using oscillations or not. It is to note oscillations are computed given the value at the bin center, thus for bins where fast oscillations happen there will be some differences compared with computing the average oscillations in the bin.
 - `MC_scaling::Float64 (optional)`: If doing sensitivity studies, this argument allows to scale the MC by a certain value.
 
 """
