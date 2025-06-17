@@ -6,9 +6,14 @@
 [![Coverage](https://git.km3net.de/common/KM3OpenOsc.jl/badges/main/coverage.svg)](https://git.km3net.de/common/KM3OpenOsc.jl/commits/main)
 
 Welcome to the `KM3OpenOsc.jl` repository!
+A Julia package for loading and exploring KM3NeT oscillations open data sets.
+
+This package allows to build histograms corresponding to the response of the detector from a given binning definition and fill and export those histograms computing flux and oscillations properly using the weights given by the open dataset.
 
 
 ## Documentation
+
+
 
 Check out the **[Latest Documention](https://common.pages.km3net.de/KM3OpenOsc.jl/dev)**
 which also includes tutorials and examples.
@@ -16,8 +21,14 @@ which also includes tutorials and examples.
 
 ## Installation
 
+### Julia installation
+
+`KM3OpenOsc.jl` is a package written in Julia, this assumes you have a working Julia version in your machine. If you do not have Julia installed in your machine please follow the guidelines in the [official Julia documentation](https://docs.julialang.org/en/v1/manual/installation/).
+
+### KM3OpenOsc.jl installation
+
 `KM3OpenOsc.jl` is **not an officially registered Julia package** but it's available via the **[KM3NeT Julia registry](https://git.km3net.de/common/julia-registry)**. To add the KM3NeT Julia registry to your local Julia registry list, follow the instructions in its
-[README](https://git.km3net.de/common/julia-registry#adding-the-registry) or simply do
+[README](https://git.km3net.de/common/julia-registry#adding-the-registry) or do
 
     git clone https://git.km3net.de/common/julia-registry ~/.julia/registries/KM3NeT
     
@@ -32,14 +43,17 @@ After that, you can add `KM3OpenOsc.jl` just like any other Julia package:
 julia> using KM3OpenOsc
 ```
 
-## Quick example with KM3NeT Test data
+## Quick example with KM3NeT ORCA 433 kt-y Open Data
+
+
+ORCA 433 kt-y open dataset can be downloaded from the following [dataverse link](https://opendata.km3net.de/dataset.xhtml?persistentId=doi:10.5072/FK2/Y0UXVW) and later unzipped to have access to the files needed.
+After unzipping the file into a directory, 5 files will be found including a README among them where the content of each file is carefully explained.
 
 First we load the packages needed
 
 ```julia
 using KM3OpenOsc
 using KM3io
-using KM3NeTTestData
 using NuFlux
 ```
 
@@ -47,8 +61,8 @@ Set up a couple of paths to load files from the test data
 
 ```julia
 
-OSCFILE = KM3NeTTestData.datapath("oscillations", "ORCA6_433kt-y_opendata_v0.5_testdata.root")
-BINDEF = KM3NeTTestData.datapath("oscillations", "bins_433kt-y_v0.4.json")
+OSCFILE = "\path\to\unzipped\open\data\ORCA6_433kt-y_opendata_v0.5.root")
+BINDEF = "\path\to\unzipped\open\data\bins_433kt-y_v0.5.json")
 ```
 
 We can now load the open data file and check its contents
@@ -114,7 +128,7 @@ close(h5f)
 
 ###  More detailed example
 
-See an more detailed example on how to read and plot the data [here](https://km3openosc-jl-fd9d00.pages.km3net.de/dev/notebooks/example_read_and_plot/).
+See an more detailed example notebook on how to read and plot the data [here](https://km3openosc-jl-fd9d00.pages.km3net.de/dev/notebooks/example_read_and_plot_open_data/), this notebook was generated from `notebooks/example_read_and_plot_open_data.jl`.
 
 ## License and Disclaimer
 

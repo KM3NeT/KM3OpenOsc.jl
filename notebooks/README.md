@@ -1,10 +1,19 @@
-# KM3OpenOsc Example: Plotting KM3NeT Open Test Data
+# KM3OpenOsc Example: Plotting KM3NeT ORCA 433 kt-y Open Data
 
-This project demonstrates how to use `KM3OpenOsc.jl`  to load and analyze the KM3NeT ORCA 433 kt-y open data release using its test version. The example is provided as a [Pluto.jl](https://github.com/fonsp/Pluto.jl) notebook for interactivity and reproducibility.
+This project demonstrates how to use `KM3OpenOsc.jl`  to load and analyze the KM3NeT ORCA 433 kt-y open data release. The example is provided as a [Pluto.jl](https://github.com/fonsp/Pluto.jl) notebook for interactivity and reproducibility.
+
+## Getting dataset
+
+Dataset used in this notebook corresponds to the dataset used in the KM3NeT/ORCA oscillation results using 433 kt-y of exposure from the paper [JHEP10(2024)206](https://link.springer.com/content/pdf/10.1007/JHEP10(2024)206.pdf). 
+It is intended as a reference implementation and a starting point for further analyses, education, and reproducibility efforts in the field of neutrino oscillation physics.
+
+Dataset can be found in the following [dataverse link](https://opendata.km3net.de/dataset.xhtml?persistentId=doi:10.5072/FK2/Y0UXVW) where a zip file containing the necessary information can be downloaded.
+After unzipping the file into a directory, 5 files will be found including a README among them where the content of each file is carefully explained.
+
 
 ## Example Notebook
 
-The rendered version of the notebook can be found in the documentation [**here**](https://km3openosc-jl-fd9d00.pages.km3net.de/dev/notebooks/example_read_and_plot/).
+The rendered version of the notebook can be found in the documentation [**here**](https://km3openosc-jl-fd9d00.pages.km3net.de/dev/notebooks/example_read_and_plot_open_data/).
 
 The notebook walks through the following:
 - Loading open data and binning definitions
@@ -39,4 +48,4 @@ using Pluto
 Pluto.run()
 ```
 
-Then open the `example_read_and_plot.jl` file in your browser.
+Then open the `example_read_and_plot_open_data.jl` file in your browser and execute it.
