@@ -44,7 +44,7 @@ julia> using KM3OpenOsc
 ## Quick example with KM3NeT ORCA 433 kt-y Open Data
 
 
-ORCA 433 kt-y open dataset can be downloaded from the following [dataverse link](https://opendata.km3net.de/dataset.xhtml?persistentId=doi:10.5072/FK2/Y0UXVW) and later unzipped to have access to the files needed.
+ORCA 433 kt-y open dataset can be downloaded from the following [KM3NeT Open Data Center](https://opendata.km3net.de/dataset.xhtml?persistentId=doi:10.5072/FK2/Y0UXVW) and later unzipped to have access to the files needed.
 After unzipping the file into a directory, 5 files will be found including a README among them where the content of each file is carefully explained.
 
 First we load the packages needed
