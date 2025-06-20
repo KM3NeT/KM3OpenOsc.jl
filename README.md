@@ -28,9 +28,7 @@ which also includes tutorials and examples.
 ### KM3OpenOsc.jl installation
 
 `KM3OpenOsc.jl` is **not an officially registered Julia package** but it's available via the **[KM3NeT Julia registry](https://git.km3net.de/common/julia-registry)**. To add the KM3NeT Julia registry to your local Julia registry list, follow the instructions in its
-[README](https://git.km3net.de/common/julia-registry#adding-the-registry) or do
-
-    git clone https://git.km3net.de/common/julia-registry ~/.julia/registries/KM3NeT
+[README](https://git.km3net.de/common/julia-registry#adding-the-registry).
     
 After that, you can add `KM3OpenOsc.jl` just like any other Julia package:
 
