@@ -7,7 +7,7 @@ This project demonstrates how to use `KM3OpenOsc.jl`  to load and analyze the KM
 Dataset used in this notebook corresponds to the dataset used in the KM3NeT/ORCA oscillation results using 433 kt-y of exposure from the paper [JHEP10(2024)206](https://link.springer.com/content/pdf/10.1007/JHEP10(2024)206.pdf). 
 It is intended as a reference implementation and a starting point for further analyses, education, and reproducibility efforts in the field of neutrino oscillation physics.
 
-Dataset can be found in the following [dataverse link](https://opendata.km3net.de/dataset.xhtml?persistentId=doi:10.5072/FK2/Y0UXVW) where a zip file containing the necessary information can be downloaded.
+Dataset can be found in the following [KM3NeT Open Data Center](https://opendata.km3net.de/dataset.xhtml?persistentId=doi:10.5072/FK2/Y0UXVW) where a zip file containing the necessary information can be downloaded.
 After unzipping the file into a directory, 5 files will be found including a README among them where the content of each file is carefully explained.
 
 
